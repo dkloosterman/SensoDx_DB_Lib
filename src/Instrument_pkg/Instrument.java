@@ -16,7 +16,7 @@ import java.util.Date;
 public class Instrument {
     
     public enum DeploymentType {
-        LDT, ResearchAndDevelopment, Product, Manufacturing
+        Virtual, LDT, ResearchAndDevelopment, Product, Manufacturing
     };
 //    DeploymentType objectType = DeploymentType.INSTRUMENT;
 
