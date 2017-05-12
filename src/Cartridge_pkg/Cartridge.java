@@ -14,21 +14,27 @@ import static TestInstance_pkg.TestInstance.ASSAY_FIELD_LENGTH;
  * @author David Kloosterman
  */
 public class Cartridge {
-    
+
+    public enum DeploymentType {
+        Virtual, LDT, ResearchAndDevelopment, Product, Manufacturing
+    };
+
     /*
     CREATE TABLE Cartridge_Manufactured (
        cartridge_id VARCHAR (20),
        manufactured_timestamp TIMESTAMP,
+       deployment_type VARCHAR (25),
        manufactured_location TEXT,
-       assay_type VARCHAR (50),
+       assay_type INT,
        subsystem_1_id VARCHAR (20),
        subsystem_2_id VARCHAR (20),
        subsystem_3_id VARCHAR (20),
-       PRIMARY KEY (cartridge_id ) );
-    */
-    
+       PRIMARY KEY (cartridge_id )
+);
+     */
     String cartridge_id;
     Date manufactured_timestamp;
+    String deployment_type;
     String manufactured_location;
     int assay_type;
     String subsystem_1_id;
@@ -38,19 +44,20 @@ public class Cartridge {
     public Cartridge() {
 
     }
-    
+
     @Override
     public String toString() {
-        
+
         String binaryAssayType = TestInstance.convertIntegerToBinaryString(assay_type, ASSAY_FIELD_LENGTH);
-                        
-        return  "Cartridge Manufacturing Information" 
-                + "\n   cartridge_id =\t\t" + cartridge_id 
-                + "\n   manufactured_timestamp =\t" + manufactured_timestamp 
-                + "\n   manufactured_location =\t" + manufactured_location 
-                + "\n   assay_type =\t\t" + binaryAssayType 
-                + "\n   subsystem_1_id =\t" + subsystem_1_id 
-                + "\n   subsystem_2_id =\t" + subsystem_2_id 
+
+        return "Cartridge Manufacturing Information"
+                + "\n   cartridge_id =\t\t" + cartridge_id
+                + "\n   manufactured_timestamp =\t" + manufactured_timestamp
+                + "\n   deployment_type =\t" + deployment_type
+                + "\n   manufactured_location =\t" + manufactured_location
+                + "\n   assay_type =\t\t" + binaryAssayType
+                + "\n   subsystem_1_id =\t" + subsystem_1_id
+                + "\n   subsystem_2_id =\t" + subsystem_2_id
                 + "\n   subsystem_3_id =\t" + subsystem_3_id;
     }
 
@@ -109,5 +116,13 @@ public class Cartridge {
     public void setSubsystem_3_id(String subsystem_3_id) {
         this.subsystem_3_id = subsystem_3_id;
     }
-    
+
+    public String getDeployment_type() {
+        return deployment_type;
+    }
+
+    public void setDeployment_type(String deployment_type) {
+        this.deployment_type = deployment_type;
+    }
+
 }

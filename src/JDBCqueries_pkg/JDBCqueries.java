@@ -66,6 +66,7 @@ public class JDBCqueries {
             while (rs.next()) {
                 cartridge.setCartridge_id(rs.getString("cartridge_id"));
                 cartridge.setManufactured_timestamp(rs.getTimestamp("manufactured_timestamp"));
+                cartridge.setDeployment_type((String) rs.getString("deployment_type"));
                 cartridge.setManufactured_location(rs.getString("manufactured_location"));
                 cartridge.setAssay_type(rs.getInt("assay_type"));
                 cartridge.setSubsystem_1_id(rs.getString("subsystem_1_id"));
@@ -118,9 +119,14 @@ public class JDBCqueries {
     public void insertCartridge(Cartridge cartridge) {
 
         try {
-            sql = "INSERT INTO Cartridge_Manufactured VALUES "
+            sql = "INSERT INTO Cartridge_Manufactured"
+                    + "(cartridge_id, manufactured_timestamp, deployment_type, "
+                    + "manufactured_location, assay_type, "
+                    + "subsystem_1_id, subsystem_2_id, subsystem_3_id)"
+                    + " VALUES "
                     + "('" + cartridge.getCartridge_id()
                     + "', '" + cartridge.getManufactured_timestamp()
+                    + "', '" + cartridge.getDeployment_type()
                     + "', '" + cartridge.getManufactured_location()
                     + "', '" + cartridge.getAssay_type()
                     + "', '" + cartridge.getSubsystem_1_id()
@@ -156,14 +162,13 @@ public class JDBCqueries {
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setInstallation_timestamp(rs.getTimestamp("installation_timestamp"));
                 instrument.setDeployment_type(rs.getString("deployment_type"));
-                
+
                 // example of how to use the Instrument.DeploymentType enum
 //                if(instrument.getDeployment_type().equals(Instrument.DeploymentType.LDT.toString())){
 //                    System.out.println("a deployment to LDT");
 //                }
 //                System.out.println("enum value: >" + Instrument.DeploymentType.LDT + "<");
 //                System.out.println("instrument value: >" + instrument.getDeployment_type() + "<");
-
                 instrument.setCustomer_id(rs.getString("customer_id"));
                 instrument.setCustomer_name(rs.getString("customer_name"));
                 instrument.setCustomer_location(rs.getString("customer_location"));
@@ -391,5 +396,5 @@ public class JDBCqueries {
             return (dicom.getClinicalTestImage_id());
         }   //end finally try
     }
- 
+
 }
