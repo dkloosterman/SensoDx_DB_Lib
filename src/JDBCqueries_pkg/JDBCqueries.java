@@ -220,6 +220,33 @@ public class JDBCqueries {
         return (allInstrIDs);
     }
 
+    public ArrayList getAllErrorIDs() {
+
+        ArrayList<String> allIDs = new ArrayList<String>();
+
+        try {
+
+            sql = "SELECT error_counter FROM Instrument_Error";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                allIDs.add(rs.getString("error_counter"));
+            } // end while (rs.next()) 
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally
+        return (allIDs);
+    }
     public void getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
 
         try {
@@ -397,4 +424,32 @@ public class JDBCqueries {
         }   //end finally try
     }
 
+    public ArrayList getAllTestInstanceIDs() {
+
+        ArrayList<String> allIDs = new ArrayList<String>();
+
+        try {
+
+            sql = "SELECT clinical_test_instance_counter FROM Clinical_Test_Instance";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                String ID_str = String.valueOf(rs.getInt("clinical_test_instance_counter"));
+                allIDs.add(ID_str);
+            } // end while (rs.next()) 
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally
+        return (allIDs);
+    }
 }
