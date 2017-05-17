@@ -247,6 +247,7 @@ public class JDBCqueries {
         }   //end finally
         return (allIDs);
     }
+    
     public void getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
 
         try {
