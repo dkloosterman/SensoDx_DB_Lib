@@ -453,6 +453,13 @@ public class JDBCqueries {
             while (rs.next()) {
                 error.setError_counter(rs.getLong("error_counter"));
             }
+            
+//            sql = "SELECT error_counter FROM Errors WHERE error_timestamp > '" + "2017-04-04 16:00:00" + "'";            
+//            rs = stmt.executeQuery(sql);
+//            long counter = 0;
+//            while (rs.next()) {
+//                 counter = (rs.getLong("error_counter"));
+//            }
 
         } catch (SQLException e) {
             // handle the error
