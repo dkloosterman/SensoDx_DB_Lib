@@ -9,7 +9,7 @@ package Errors_pkg;
 import Cartridge_pkg.Cartridge;
 import Instrument_pkg.Instrument;
 import TestInstance_pkg.TestInstance;
-import java.sql.Timestamp;
+import java.sql.*;
 
 /**
  *
@@ -36,7 +36,8 @@ public class Errors {
     String cartridge_id = null;
     String test_instance_id = null;
     String error_code = null;
-    Timestamp error_timestamp = null;
+    Timestamp  error_timestamp = null;
+//    String error_timestamp = null;
 
     @Override
     public String toString() {
@@ -112,14 +113,14 @@ public class Errors {
             String testInstance_id) {
 
         try {
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+//            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             
             this.setDescription("Cartridge is not compatible with assay tests supported by this Instrument");
             this.setInstrument_id(instrument_id);
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
             this.setError_code(ErrorCode_CartridgeNotCampatibleWithInstrument);
-            this.setError_timestamp(timestamp);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {
             // handle the error

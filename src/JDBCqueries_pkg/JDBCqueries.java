@@ -447,12 +447,12 @@ public class JDBCqueries {
             // get and display data for seleted Instrument ID
             stmt.executeUpdate(sql);
 
-//            sql = "SELECT error_counter FROM Errors";
-//            rs = stmt.executeQuery(sql);
-//
-//            while (rs.next()) {
-//                error.setError_counter(rs.getLong("error_counter"));
-//            }
+            sql = "SELECT error_counter FROM Errors WHERE error_timestamp = '" + error.getError_timestamp() + "'";            
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                error.setError_counter(rs.getLong("error_counter"));
+            }
 
         } catch (SQLException e) {
             // handle the error
