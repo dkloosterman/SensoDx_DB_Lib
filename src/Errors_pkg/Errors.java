@@ -5,13 +5,20 @@
  */
 package Errors_pkg;
 
-import java.util.Date;
+//import java.util.Date;
+import Cartridge_pkg.Cartridge;
+import Instrument_pkg.Instrument;
+import TestInstance_pkg.TestInstance;
+import java.sql.Timestamp;
 
 /**
  *
  * @author Owner
  */
 public class Errors {
+    
+    final public String ErrorCode_CartridgeNotCampatibleWithInstrument = "1001";
+
     /*
     CREATE TABLE Instrument_Error (
        error_counter BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -19,8 +26,8 @@ public class Errors {
        instrument_id VARCHAR (20),
        cartridge_id VARCHAR (20),
        test_instance_id VARCHAR (20),
-       instrument_error_code VARCHAR (20),
-       instrument_error_timestamp TIMESTAMP,
+       error_code VARCHAR (20),
+       error_timestamp TIMESTAMP,
        PRIMARY KEY (error_counter )
 );  */
     long error_counter = 0;
@@ -28,19 +35,19 @@ public class Errors {
     String instrument_id = null;
     String cartridge_id = null;
     String test_instance_id = null;
-    String instrument_error_code = null;
-    Date instrument_error_timestamp = null;
+    String error_code = null;
+    Timestamp error_timestamp = null;
 
     @Override
     public String toString() {
         return "Errors:"
-                + "\n   error_counter= \t\t" + error_counter 
-                + "\n   description= \t\t" + description 
-                + "\n   instrument_id= \t\t" + instrument_id 
-                + "\n   cartridge_id= \t\t" + cartridge_id 
-                + "\n   test_instance_id=\t\t" + test_instance_id 
-                + "\n   instrument_error_code= \t\t" + instrument_error_code 
-                + "\n   instrument_error_timestamp= \t\t" + instrument_error_timestamp 
+                + "\n   error_counter= \t" + error_counter
+                + "\n   description= \t\t" + description
+                + "\n   instrument_id= \t" + instrument_id
+                + "\n   cartridge_id= \t\t" + cartridge_id
+                + "\n   test_instance_id=\t" + test_instance_id
+                + "\n   error_code= \t\t" + error_code
+                + "\n   error_timestamp= \t" + error_timestamp
                 + "\n";
     }
 
@@ -84,19 +91,42 @@ public class Errors {
         this.test_instance_id = test_instance_id;
     }
 
-    public String getInstrument_error_code() {
-        return instrument_error_code;
+    public String getError_code() {
+        return error_code;
     }
 
-    public void setInstrument_error_code(String instrument_error_code) {
-        this.instrument_error_code = instrument_error_code;
+    public void setError_code(String error_code) {
+        this.error_code = error_code;
     }
 
-    public Date getInstrument_error_timestamp() {
-        return instrument_error_timestamp;
+    public Timestamp getError_timestamp() {
+        return error_timestamp;
     }
 
-    public void setInstrument_error_timestamp(Date instrument_error_timestamp) {
-        this.instrument_error_timestamp = instrument_error_timestamp;
+    public void setError_timestamp(Timestamp error_timestamp) {
+        this.error_timestamp = error_timestamp;
+    }
+
+    public void buildErrorObject_CartridgeNotCampatibleWithInstrument(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            
+            this.setDescription("Cartridge is not compatible with assay tests supported by this Instrument");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_CartridgeNotCampatibleWithInstrument);
+            this.setError_timestamp(timestamp);
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
     }
 }

@@ -5,6 +5,7 @@ import Instrument_pkg.Instrument;
 import java.sql.Timestamp;
 import java.util.Date;
 import JDBCqueries_pkg.JDBCqueries;
+import Errors_pkg.Errors;
 import static java.lang.Integer.toBinaryString;
 
 /**
@@ -78,7 +79,7 @@ public class TestInstance {
                     = queries.insertClinicalTestImage(this.dicom);
 
             if (insertImage_id > 0) {
-                
+
                 this.setAnalysis_result(Math.random());   // temp code here until algorithms integrated
                 this.setRaw_assay_data(this.dicom.getClinicalTestImage_id());
 
@@ -90,8 +91,16 @@ public class TestInstance {
             }
 
         } else {
+            Errors error = new Errors();
+
+            error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
+                    this.cartridge_id,
+                    null);
+            
+            this.queries.insertError(error);
+
             testResult = false;
-            this.testResultString = "Failure: Cartridge is not compatible with assay tests supported by this Instrument";
+            this.testResultString = error.toString();
         }
 
         return (testResult);

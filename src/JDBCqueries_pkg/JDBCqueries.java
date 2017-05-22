@@ -5,6 +5,7 @@ import java.util.*;
 import Instrument_pkg.Instrument;
 import Cartridge_pkg.Cartridge;
 import TestInstance_pkg.*;
+import Errors_pkg.Errors;
 import java.io.*;
 import java.util.Date;
 
@@ -220,34 +221,6 @@ public class JDBCqueries {
         return (allInstrIDs);
     }
 
-    public ArrayList getAllErrorIDs() {
-
-        ArrayList<String> allIDs = new ArrayList<String>();
-
-        try {
-
-            sql = "SELECT error_counter FROM Instrument_Error";
-            rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                allIDs.add(rs.getString("error_counter"));
-            } // end while (rs.next()) 
-
-        } catch (SQLException e) {
-            // handle the error
-            System.out.println("\n" + "SQL Exception " + e.getMessage());
-            System.exit(0);
-        } catch (Exception e) {
-            // handle the error
-            System.out.println("\n" + "General Exception " + e.getMessage());
-            System.exit(0);
-        } finally {
-            //finally block used to close resources
-
-        }   //end finally
-        return (allIDs);
-    }
-    
     public void getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
 
         try {
@@ -453,4 +426,75 @@ public class JDBCqueries {
         }   //end finally
         return (allIDs);
     }
+
+    // Error queries
+    public long insertError(Errors error) {
+
+        try {
+            /*
+             (description, instrument_id, cartridge_id, 
+                     test_instance_id, error_code, error_timestamp)
+             */
+            sql = "INSERT INTO Errors "
+                    + "(description, instrument_id, cartridge_id, "
+                    + "test_instance_id, error_code, error_timestamp) "
+                    + "VALUES "
+                    + "('" + error.getDescription() + "', '" + error.getInstrument_id()
+                    + "', '" + error.getCartridge_id() + "', '" + error.getTest_instance_id()
+                    + "', '" + error.getError_code() + "', '" + error.getError_timestamp()
+                    + "')";
+
+            // get and display data for seleted Instrument ID
+            stmt.executeUpdate(sql);
+
+//            sql = "SELECT error_counter FROM Errors";
+//            rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                error.setError_counter(rs.getLong("error_counter"));
+//            }
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+            return (error.getError_counter());
+        }   //end finally try
+    }
+
+    public ArrayList getAllErrorIDs() {
+
+        ArrayList<String> allIDs = new ArrayList<String>();
+
+        try {
+
+            sql = "SELECT error_counter FROM Errors";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                allIDs.add(rs.getString("error_counter"));
+            } // end while (rs.next()) 
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally
+        return (allIDs);
+    }
+
 }
