@@ -53,7 +53,7 @@ public class TestInstance {
         this.queries = new JDBCqueries();
 
     }
-
+    
     public boolean processTest(Instrument instrument, Cartridge cartridge) {
         boolean testResult = true;  // return true if test successfully processed
 

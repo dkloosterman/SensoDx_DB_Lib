@@ -427,6 +427,38 @@ public class JDBCqueries {
         return (allIDs);
     }
 
+    public void getTestInstanceInfo(String testID, TestInstance test) {
+
+        try {
+            sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                test.setClinical_test_instance_counter(rs.getInt("clinical_test_instance_counter"));
+                test.setCartridge_id(rs.getString("cartridge_id"));
+                test.setInstrument_id(rs.getString("instrument_id"));
+                test.setPatient_id(rs.getString("patient_id"));
+                test.setTechnician_id(rs.getString("technician_id"));
+                test.setDoctor_id(rs.getString("doctor_id"));
+                test.setRaw_assay_data(rs.getLong("raw_assay_data"));
+                test.setAnalysis_result(rs.getFloat("analysis_result"));
+                test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
+            }
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally try
+    }
+
     // Error queries
     public long insertError(Errors error) {
 
@@ -447,20 +479,19 @@ public class JDBCqueries {
             // get and display data for seleted Instrument ID
             stmt.executeUpdate(sql);
 
-            sql = "SELECT error_counter FROM Errors WHERE error_timestamp = '" + error.getError_timestamp() + "'";            
+            sql = "SELECT error_counter FROM Errors WHERE error_timestamp = '" + error.getError_timestamp() + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
                 error.setError_counter(rs.getLong("error_counter"));
             }
-            
+
 //            sql = "SELECT error_counter FROM Errors WHERE error_timestamp > '" + "2017-04-04 16:00:00" + "'";            
 //            rs = stmt.executeQuery(sql);
 //            long counter = 0;
 //            while (rs.next()) {
 //                 counter = (rs.getLong("error_counter"));
 //            }
-
         } catch (SQLException e) {
             // handle the error
             System.out.println("\n" + "SQL Exception " + e.getMessage());
@@ -504,4 +535,33 @@ public class JDBCqueries {
         return (allIDs);
     }
 
+    public void getErrorInfo(String errorID, Errors error) {
+
+        try {
+            sql = "SELECT * FROM Errors WHERE error_counter = '" + errorID + "'";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                error.setError_counter(rs.getInt("error_counter"));
+                error.setDescription(rs.getString("description"));
+                error.setInstrument_id(rs.getString("instrument_id"));
+                error.setCartridge_id(rs.getString("cartridge_id"));
+                error.setTest_instance_id(rs.getString("test_instance_id"));
+                error.setError_code(rs.getString("error_code"));
+                error.setError_timestamp(rs.getTimestamp("error_timestamp"));
+            }
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally try
+    }
 }

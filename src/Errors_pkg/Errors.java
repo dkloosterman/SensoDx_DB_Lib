@@ -113,7 +113,6 @@ public class Errors {
             String testInstance_id) {
 
         try {
-//            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             
             this.setDescription("Cartridge is not compatible with assay tests supported by this Instrument");
             this.setInstrument_id(instrument_id);
