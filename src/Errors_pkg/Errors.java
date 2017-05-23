@@ -16,8 +16,9 @@ import java.sql.*;
  * @author Owner
  */
 public class Errors {
-    
+
     final public String ErrorCode_CartridgeNotCampatibleWithInstrument = "1001";
+    final public String ErrorCode_UnableToAddClinicalTestImageToDatabase = "1002";
 
     /*
     CREATE TABLE Instrument_Error (
@@ -36,7 +37,7 @@ public class Errors {
     String cartridge_id = null;
     String test_instance_id = null;
     String error_code = null;
-    Timestamp  error_timestamp = null;
+    Timestamp error_timestamp = null;
 //    String error_timestamp = null;
 
     @Override
@@ -113,7 +114,7 @@ public class Errors {
             String testInstance_id) {
 
         try {
-            
+
             this.setDescription("Cartridge is not compatible with assay tests supported by this Instrument");
             this.setInstrument_id(instrument_id);
             this.setCartridge_id(cartridge_id);
@@ -129,4 +130,27 @@ public class Errors {
 
         }   //end finally 
     }
+    
+    public void buildErrorObject_UnableToAddClinicalTestImageToDatabase(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Unable to add Clinical Test Image to database");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_UnableToAddClinicalTestImageToDatabase);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+
 }

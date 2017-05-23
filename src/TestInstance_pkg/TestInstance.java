@@ -53,57 +53,76 @@ public class TestInstance {
         this.queries = new JDBCqueries();
 
     }
-    
+
     public boolean processTest(Instrument instrument, Cartridge cartridge) {
         boolean testResult = true;  // return true if test successfully processed
 
-        this.testResultString = "Test Successfully Completed";
+        try {
 
-        this.instrument_id = instrument.getInstrument_id();
-        this.cartridge_id = cartridge.getCartridge_id();
+            this.testResultString = "Test Successfully Completed";
 
-        // insert future code to verify this cartridge with this instrument
-        this.patient_id = "1234567890123456";
-        this.technician_id = "Jane Technician";
-        this.doctor_id = "Joe Doctor";
+            this.instrument_id = instrument.getInstrument_id();
+            this.cartridge_id = cartridge.getCartridge_id();
 
-        this.clinical_test_timestamp = new Timestamp(System.currentTimeMillis());
+            // insert future code to verify this cartridge with this instrument
+            this.patient_id = "1234567890123456";
+            this.technician_id = "Jane Technician";
+            this.doctor_id = "Joe Doctor";
 
-        this.dicom.patient_id = this.patient_id;
-        this.dicom.timestamp = this.clinical_test_timestamp;
+            this.clinical_test_timestamp = new Timestamp(System.currentTimeMillis());
 
-        // test if this Cartridge is an assay test type supported by this Instrument
-        if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
+            this.dicom.patient_id = this.patient_id;
+            this.dicom.timestamp = this.clinical_test_timestamp;
 
-            long insertImage_id
-                    = queries.insertClinicalTestImage(this.dicom);
+            // test if this Cartridge is an assay test type supported by this Instrument
+            if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
 
-            if (insertImage_id > 0) {
+                long insertImage_id
+                        = queries.insertClinicalTestImage(this.dicom);
 
-                this.setAnalysis_result(Math.random());   // temp code here until algorithms integrated
-                this.setRaw_assay_data(this.dicom.getClinicalTestImage_id());
+                if (insertImage_id > 0) {
 
-                queries.insertClinicalTestInstance(this);
+                    this.setAnalysis_result(Math.random());   // temp code here until algorithms integrated
+                    this.setRaw_assay_data(this.dicom.getClinicalTestImage_id());
+
+                    queries.insertClinicalTestInstance(this);
+
+                } else {
+                    Errors error = new Errors();
+
+                    error.buildErrorObject_UnableToAddClinicalTestImageToDatabase(this.instrument_id,
+                            this.cartridge_id,
+                            null);
+
+                    this.queries.insertError(error);
+
+                    this.testResultString = error.toString();
+                    error = null;
+                    testResult = false;
+                }
 
             } else {
+                Errors error = new Errors();
+
+                error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
+                        this.cartridge_id,
+                        null);
+
+                this.queries.insertError(error);
+
                 testResult = false;
-                this.testResultString = "Failure: Unable to add Clinical Test Image to database";
+                this.testResultString = error.toString();
+
+                error = null;
             }
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            return (testResult);
+        }   //end finally try
 
-        } else {
-            Errors error = new Errors();
-
-            error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
-                    this.cartridge_id,
-                    null);
-            
-            this.queries.insertError(error);
-
-            testResult = false;
-            this.testResultString = error.toString();
-        }
-
-        return (testResult);
     }
 
     @Override
