@@ -19,6 +19,9 @@ public class Errors {
 
     final public String ErrorCode_CartridgeNotCampatibleWithInstrument = "1001";
     final public String ErrorCode_UnableToAddClinicalTestImageToDatabase = "1002";
+    final public String ErrorCode_ClinicalTestImageNotFound = "1003";
+    final public String ErrorCode_ClinicalTestImageSetToNull = "1004";
+
 
     /*
     CREATE TABLE Instrument_Error (
@@ -38,7 +41,6 @@ public class Errors {
     String test_instance_id = null;
     String error_code = null;
     Timestamp error_timestamp = null;
-//    String error_timestamp = null;
 
     @Override
     public String toString() {
@@ -130,7 +132,7 @@ public class Errors {
 
         }   //end finally 
     }
-    
+
     public void buildErrorObject_UnableToAddClinicalTestImageToDatabase(String instrument_id,
             String cartridge_id,
             String testInstance_id) {
@@ -142,6 +144,52 @@ public class Errors {
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
             this.setError_code(ErrorCode_UnableToAddClinicalTestImageToDatabase);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+
+    public void buildErrorObject_ClinicalTestImageNotFound(String instrument_id,
+            String cartridge_id,
+            String testInstance_id,
+            String testImageFilename) {
+
+        try {
+
+            this.setDescription("Unable to run test because input clinical test image "
+                    + testImageFilename + " not found");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_ClinicalTestImageNotFound);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+
+    public void buildErrorObject_ClinicalTestImageSetToNull(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Unable to run test because input clinical test image is set to null");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_ClinicalTestImageSetToNull);
             this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {

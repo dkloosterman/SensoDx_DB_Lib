@@ -30,8 +30,6 @@ public class JDBCqueries {
 
     public JDBCqueries() {
 
-        String display = null;
-
         try {
 //            get JDBC ready for SQL queries
             Class.forName(JDBC_DRIVER);
@@ -39,15 +37,15 @@ public class JDBCqueries {
             stmt = conn.createStatement();
         } catch (ClassNotFoundException e) {
             // handle the error
-            display += "\n" + "Class Not Found Exception " + e.getMessage();
+            System.out.println("Class Not Found Exception " + e.getMessage());
             System.exit(0);
         } catch (SQLException e) {
             // handle the error
-            display += "\n" + "SQL Exception " + e.getMessage();
+            System.out.println("SQL Exception " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
             // handle the error
-            display += "\n" + "General Exception " + e.getMessage();
+            System.out.println("General Exception " + e.getMessage());
             System.exit(0);
         } finally {
             //finally block used to close resources
