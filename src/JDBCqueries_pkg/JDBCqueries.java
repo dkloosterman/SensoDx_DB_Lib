@@ -27,6 +27,7 @@ public class JDBCqueries {
     String sql = null;
     Statement stmt = null;
     ResultSet rs = null;
+    ResultSetMetaData rsmd = null;
 
     public JDBCqueries() {
 
@@ -561,5 +562,37 @@ public class JDBCqueries {
             //finally block used to close resources
 
         }   //end finally try
+    }
+    
+    // general
+    public ArrayList getTableColumnNames(String tableName) {
+        
+        ArrayList<String> columnNames = new ArrayList<String>();
+
+        try {
+
+            rs = stmt.executeQuery("SELECT * FROM " + tableName);
+            rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            // The column count starts from 1
+            for (int i = 1; i <= columnCount; i++) {
+                columnNames.add(rsmd.getColumnName(i));
+                // Do stuff with name
+            }
+
+        }catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally
+        return (columnNames);
     }
 }
