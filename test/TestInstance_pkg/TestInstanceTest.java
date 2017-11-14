@@ -66,7 +66,7 @@ public class TestInstanceTest {
         TestInstance testInstance = new TestInstance(TESTFILE_SAMPLE);
         
         System.out.println("Get CARDIACWELLNESSINSTRUMENT: " + CARDIACWELLNESSINSTRUMENT);
-        queries.getInstrumentMfgInfo(CARDIACWELLNESSINSTRUMENT, instrumentForCardiacWellness);
+        this.queries.getInstrumentMfgInfo(CARDIACWELLNESSINSTRUMENT, instrumentForCardiacWellness);
         queries.getInstrumentDeploymentInfo(CARDIACWELLNESSINSTRUMENT, instrumentForCardiacWellness);
         System.out.println(instrumentForCardiacWellness.toString());
 
