@@ -8,6 +8,9 @@ package TestInstance_pkg;
 import Cartridge_pkg.Cartridge;
 import Instrument_pkg.Instrument;
 import JDBCqueries_pkg.JDBCqueries;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,7 +30,7 @@ public class TestInstanceTest {
     static final String ORALCANCERCARTRIDGE = "20170501085526994";
 
     public static final String TESTFILE_SAMPLE = ".\\TestImage.tif";
-    
+
     JDBCqueries queries = null;
 
     public TestInstanceTest() {
@@ -63,8 +66,12 @@ public class TestInstanceTest {
         Cartridge cartridgeForCardiacWellness = new Cartridge();
         Cartridge cartridgeForOralCancer = new Cartridge();
 
-        TestInstance testInstance = new TestInstance(TESTFILE_SAMPLE);
-        
+        List<String> imagePaths = new ArrayList<>();
+        imagePaths.add(TESTFILE_SAMPLE);
+        TestInstance testInstance = new TestInstance(imagePaths);
+        testInstance.setClinical_test_timestamp(new Timestamp(System.currentTimeMillis()));
+
+
         System.out.println("Get CARDIACWELLNESSINSTRUMENT: " + CARDIACWELLNESSINSTRUMENT);
         this.queries.getInstrumentMfgInfo(CARDIACWELLNESSINSTRUMENT, instrumentForCardiacWellness);
         queries.getInstrumentDeploymentInfo(CARDIACWELLNESSINSTRUMENT, instrumentForCardiacWellness);
@@ -103,7 +110,6 @@ public class TestInstanceTest {
         assertFalse(testInstance.processTest(instrumentForOralCancer, cartridgeForCardiacWellness));
         System.out.println("Completed Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge: ");
 
-        
     }
 
 }
