@@ -360,16 +360,9 @@ public class JDBCqueries {
             currentTimestamp = currentTimestamp.replace("-", "");
 
             List<String> imagePaths = dicom.getClinicalTestFilePathsInInstrument();
-            //
-//            List<String> lList = Arrays.asList(sArray);
-
-            // iterator loop
-//            System.out.println("#1 iterator");
             Iterator<String> iterator = imagePaths.iterator();
+            
             while (iterator.hasNext()) {
-//                System.out.println(iterator.next());
-//            }
-                //
                 File imageFile = new File(iterator.next());
                 FileInputStream fis = new FileInputStream(imageFile);
                 psmnt = conn.prepareStatement("INSERT INTO Clinical_Test_Images(image, image_timestamp) " + "VALUES(?,?)");

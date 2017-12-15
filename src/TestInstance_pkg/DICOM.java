@@ -34,8 +34,7 @@ public class DICOM {
                 + "\n   timestamp =\t\t" + timestamp
                 + "\n   clinical test image ID =\t\t" + clinicalTestImage_id
                 + "\n   clinical test image length =\t\t" + clinicalTestImage_length
-                + "\n   clinical test image filenames =\t" + getTestImagePathsToString()
-                + "\n   End of DICOM 2";
+                + "\n   clinical test image filenames =\t" + getTestImagePathsToString();
     }
 
     public String getPatient_id() {
@@ -67,7 +66,7 @@ public class DICOM {
     }
 
     String getTestImagePathsToString() {
-        return String.join(", ", testImagePaths);
+        return String.join(", \n\t\t", testImagePaths);
     }
 
     public long getClinicalTestImage_length() {
