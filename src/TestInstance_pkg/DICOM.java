@@ -6,6 +6,8 @@
 package TestInstance_pkg;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -18,10 +20,12 @@ public class DICOM {
     Date timestamp = null;
     long clinicalTestImage_id = 0;
     long clinicalTestImage_length = 0;
-    String clinicalTestFilePathInInstrument = null;
+    List<String> testImagePaths;
 
-    public DICOM() {
-
+    public DICOM(List<String> imagePaths) {
+        this.testImagePaths = imagePaths.stream().collect(Collectors.toList());
+          
+        System.out.println("Hi");
     }
 
     @Override
@@ -31,7 +35,8 @@ public class DICOM {
                 + "\n   timestamp =\t\t" + timestamp
                 + "\n   clinical test image ID =\t\t" + clinicalTestImage_id
                 + "\n   clinical test image length =\t\t" + clinicalTestImage_length
-                + "\n   clinical test image filename =\t\t" + clinicalTestFilePathInInstrument;
+                + "\n   clinical test image filenames =\t" + getTestImagePathsToString()
+                + "\n   End of DICOM";
     }
 
     public String getPatient_id() {
@@ -58,12 +63,12 @@ public class DICOM {
         this.clinicalTestImage_id = clinicalTestImage_id;
     }
 
-    public String getClinicalTestFilePathInInstrument() {
-        return clinicalTestFilePathInInstrument;
+    public List<String> getClinicalTestFilePathsInInstrument() {
+        return testImagePaths;
     }
-
-    public void setClinicalTestFilePathInInstrument(String clinicalTestFilePathInInstrument) {
-        this.clinicalTestFilePathInInstrument = clinicalTestFilePathInInstrument;
+    
+    String getTestImagePathsToString(){
+        return String.join(", ", testImagePaths);
     }
 
     public long getClinicalTestImage_length() {

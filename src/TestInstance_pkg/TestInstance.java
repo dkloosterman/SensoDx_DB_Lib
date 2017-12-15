@@ -7,6 +7,7 @@ import java.util.Date;
 import JDBCqueries_pkg.JDBCqueries;
 import Errors_pkg.Errors;
 import static java.lang.Integer.toBinaryString;
+import java.util.List;
 
 /**
  *
@@ -47,9 +48,8 @@ public class TestInstance {
     public DICOM dicom = null;
     JDBCqueries queries = null;
 
-    public TestInstance(String pathToRawAssayFile) {
-        this.dicom = new DICOM();
-        this.dicom.setClinicalTestFilePathInInstrument(pathToRawAssayFile);
+    public TestInstance(List<String> imagePaths) {
+        this.dicom = new DICOM(imagePaths);
         this.queries = new JDBCqueries();
 
     }
@@ -66,8 +66,8 @@ public class TestInstance {
 
             // insert future code to verify this cartridge with this instrument
             this.patient_id = "1234567890123456";
-            this.technician_id = "Jane Technician";
-            this.doctor_id = "Joe Doctor";
+            this.technician_id = "Joe Technician";
+            this.doctor_id = "Jane Doctor";
 
             this.clinical_test_timestamp = new Timestamp(System.currentTimeMillis());
 

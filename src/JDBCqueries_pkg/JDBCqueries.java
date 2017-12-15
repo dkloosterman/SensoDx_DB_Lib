@@ -359,28 +359,40 @@ public class JDBCqueries {
             currentTimestamp = currentTimestamp.replace(".", "");
             currentTimestamp = currentTimestamp.replace("-", "");
 
-            File imageFile = new File(dicom.getClinicalTestFilePathInInstrument());
-            FileInputStream fis = new FileInputStream(imageFile);
-            psmnt = conn.prepareStatement("INSERT INTO Clinical_Test_Images(image, image_timestamp) " + "VALUES(?,?)");
-            psmnt.setBinaryStream(1, (InputStream) fis, (int) (imageFile.length()));
-            psmnt.setString(2, currentTimestamp);
-            int s = psmnt.executeUpdate();
-            if (s > 0) {
-                sql = "SELECT * FROM Clinical_Test_Images WHERE image_timestamp = '" + currentTimestamp + "'";
-                rs = stmt.executeQuery(sql);
+            List<String> imagePaths = dicom.getClinicalTestFilePathsInInstrument();
+            //
+//            List<String> lList = Arrays.asList(sArray);
 
-                while (rs.next()) {
-                    dicom.setClinicalTestImage_id(rs.getLong("clinical_test_image_counter"));
-                    dicom.setClinicalTestImage_length(imageFile.length());
+            // iterator loop
+//            System.out.println("#1 iterator");
+            Iterator<String> iterator = imagePaths.iterator();
+            while (iterator.hasNext()) {
+//                System.out.println(iterator.next());
+//            }
+                //
+                File imageFile = new File(iterator.next());
+                FileInputStream fis = new FileInputStream(imageFile);
+                psmnt = conn.prepareStatement("INSERT INTO Clinical_Test_Images(image, image_timestamp) " + "VALUES(?,?)");
+                psmnt.setBinaryStream(1, (InputStream) fis, (int) (imageFile.length()));
+                psmnt.setString(2, currentTimestamp);
+                int s = psmnt.executeUpdate();
+                if (s > 0) {
+                    sql = "SELECT * FROM Clinical_Test_Images WHERE image_timestamp = '" + currentTimestamp + "'";
+                    rs = stmt.executeQuery(sql);
+
+                    while (rs.next()) {
+                        dicom.setClinicalTestImage_id(rs.getLong("clinical_test_image_counter"));
+                        dicom.setClinicalTestImage_length(imageFile.length());
+                    }
+                    System.out.println("Image Uploaded successfully !");
+
+                } else {
+                    System.out.println("unsucessfull to upload image.");
                 }
-                System.out.println("Image Uploaded successfully !");
 
-            } else {
-                System.out.println("unsucessfull to upload image.");
+                psmnt.close();
+                fis.close();
             }
-
-            psmnt.close();
-            fis.close();
 
         } catch (SQLException e) {
             // handle the error
@@ -563,10 +575,10 @@ public class JDBCqueries {
 
         }   //end finally try
     }
-    
+
     // general
     public ArrayList getTableColumnNames(String tableName) {
-        
+
         ArrayList<String> columnNames = new ArrayList<String>();
 
         try {
@@ -581,7 +593,7 @@ public class JDBCqueries {
                 // Do stuff with name
             }
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             // handle the error
             System.out.println("\n" + "SQL Exception " + e.getMessage());
             System.exit(0);
