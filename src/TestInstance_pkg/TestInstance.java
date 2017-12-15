@@ -2,7 +2,7 @@ package TestInstance_pkg;
 
 import Cartridge_pkg.Cartridge;
 import Instrument_pkg.Instrument;
-import java.sql.Timestamp;
+//import java.sql.Timestamp;
 import java.util.Date;
 import JDBCqueries_pkg.JDBCqueries;
 import Errors_pkg.Errors;
@@ -58,23 +58,15 @@ public class TestInstance {
         boolean testResult = true;  // return true if test successfully processed
 
         try {
-
             this.testResultString = "Test Successfully Completed";
 
             this.instrument_id = instrument.getInstrument_id();
             this.cartridge_id = cartridge.getCartridge_id();
 
-            // insert future code to verify this cartridge with this instrument
-            this.patient_id = "1234567890123456";
-            this.technician_id = "Joe Technician";
-            this.doctor_id = "Jane Doctor";
+            // set up DICOM content
+            this.dicom.setPatient_id(this.patient_id);
+            this.dicom.setTimestamp(this.clinical_test_timestamp);
 
-            this.clinical_test_timestamp = new Timestamp(System.currentTimeMillis());
-
-            this.dicom.patient_id = this.patient_id;
-            this.dicom.timestamp = this.clinical_test_timestamp;
-
-            // test if this Cartridge is an assay test type supported by this Instrument
             if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
 
                 long insertImage_id

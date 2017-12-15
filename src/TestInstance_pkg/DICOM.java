@@ -24,8 +24,7 @@ public class DICOM {
 
     public DICOM(List<String> imagePaths) {
         this.testImagePaths = imagePaths.stream().collect(Collectors.toList());
-          
-        System.out.println("Hi");
+
     }
 
     @Override
@@ -36,7 +35,7 @@ public class DICOM {
                 + "\n   clinical test image ID =\t\t" + clinicalTestImage_id
                 + "\n   clinical test image length =\t\t" + clinicalTestImage_length
                 + "\n   clinical test image filenames =\t" + getTestImagePathsToString()
-                + "\n   End of DICOM";
+                + "\n   End of DICOM 2";
     }
 
     public String getPatient_id() {
@@ -66,8 +65,8 @@ public class DICOM {
     public List<String> getClinicalTestFilePathsInInstrument() {
         return testImagePaths;
     }
-    
-    String getTestImagePathsToString(){
+
+    String getTestImagePathsToString() {
         return String.join(", ", testImagePaths);
     }
 
