@@ -75,6 +75,8 @@ public class TestInstance {
                 if (insertImage_id > 0) {
 
                     this.setAnalysis_result(Math.random());   // temp code here until algorithms integrated
+                    
+                    // NEED TO ADD SUPPORT FOR MULTI IMAGES
                     this.setRaw_assay_data(this.dicom.getClinicalTestImage_id());
 
                     queries.insertClinicalTestInstance(this);

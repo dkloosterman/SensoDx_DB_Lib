@@ -18,8 +18,12 @@ public class DICOM {
 //    public static final String TESTFILE_SAMPLE = ".\\TestImage.tif";
     String patient_id = null;
     Date timestamp = null;
-    long clinicalTestImage_id = 0;
-    long clinicalTestImage_length = 0;
+    
+    // NEED TO ADD SUPPORT FOR MULTI IMAGES... maybe add a new Class TestImage?
+    long clinicalTestImage_id = 0;  // to List<long>
+    long clinicalTestImage_length = 0;   // to List<long>
+    List<Long> ids;
+    List<Long> lengths;
     List<String> testImagePaths;
 
     public DICOM(List<String> imagePaths) {
@@ -28,7 +32,7 @@ public class DICOM {
     }
 
     @Override
-    public String toString() {
+    public String toString() {   // add support for Multi images
         return "\nDICOM"
                 + "\n   patient_id =\t\t" + patient_id
                 + "\n   timestamp =\t\t" + timestamp
