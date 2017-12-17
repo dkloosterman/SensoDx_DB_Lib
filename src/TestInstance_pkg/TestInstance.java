@@ -7,6 +7,7 @@ import java.util.Date;
 import JDBCqueries_pkg.JDBCqueries;
 import Errors_pkg.Errors;
 import static java.lang.Integer.toBinaryString;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +40,8 @@ public class TestInstance {
     String patient_id = null;
     String technician_id = null;
     String doctor_id = null;
-    long raw_assay_data = 0;
+    List<Long> image_id_list;
+    String image_id_str = null;
     double analysis_result = 0;
     Date clinical_test_timestamp = null;
 
@@ -49,6 +51,7 @@ public class TestInstance {
     JDBCqueries queries = null;
 
     public TestInstance(List<String> imagePaths) {
+        image_id_list = new ArrayList<>();
         this.dicom = new DICOM(imagePaths);
         this.queries = new JDBCqueries();
 
@@ -69,17 +72,19 @@ public class TestInstance {
 
             if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
 
-                long insertImage_id
-                        = queries.insertClinicalTestImage(this.dicom);
+                if (queries.insertClinicalTestImages(this.dicom)) {
 
-                if (insertImage_id > 0) {
+                    List<TestImage> images = this.dicom.testImages;
+                    this.image_id_list.clear();
+                    this.image_id_str = null;
+                    Long id;
 
-                    this.setAnalysis_result(Math.random());   // temp code here until algorithms integrated
-                    
-                    // NEED TO ADD SUPPORT FOR MULTI IMAGES
-                    this.setRaw_assay_data(this.dicom.getClinicalTestImage_id());
+                    for (TestImage image : images) {
 
-                    queries.insertClinicalTestInstance(this);
+                        id = image.getClinicalTestImage_id();
+                        this.image_id_list.add(id);
+                        this.image_id_str += id.toString();
+                    }
 
                 } else {
                     Errors error = new Errors();
@@ -92,8 +97,11 @@ public class TestInstance {
 
                     this.testResultString = error.toString();
                     error = null;
+
                     testResult = false;
                 }
+                this.setAnalysis_result(Math.random());
+                queries.insertClinicalTestInstance(this);
 
             } else {
                 Errors error = new Errors();
@@ -104,10 +112,11 @@ public class TestInstance {
 
                 this.queries.insertError(error);
 
-                testResult = false;
                 this.testResultString = error.toString();
 
                 error = null;
+
+                testResult = false;
             }
         } catch (Exception e) {
             // handle the error
@@ -128,7 +137,7 @@ public class TestInstance {
                 + "\n   patient_id = \t\t" + patient_id
                 + "\n   technician_id = \t" + technician_id
                 + "\n   doctor_id = \t\t" + doctor_id
-                + "\n   raw_assay_data = \t" + raw_assay_data
+                + "\n   raw_assay_data = \t" + image_id_str
                 + "\n   analysis_result = \t" + analysis_result
                 + "\n   clinical_test_timestamp = \t" + clinical_test_timestamp
                 + "\n"
@@ -183,12 +192,14 @@ public class TestInstance {
         this.doctor_id = doctor_id;
     }
 
-    public long getRaw_assay_data() {
-        return raw_assay_data;
+    public String getImage_id_str() {
+
+        return image_id_str;
     }
 
-    public void setRaw_assay_data(long raw_assay_data) {
-        this.raw_assay_data = raw_assay_data;
+    public void setImage_id_str(String data) {
+        this.image_id_str = data;
+
     }
 
     public double getAnalysis_result() {

@@ -5,9 +5,11 @@
  */
 package TestInstance_pkg;
 
+//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 /**
  *
@@ -17,28 +19,29 @@ public class DICOM {
 
 //    public static final String TESTFILE_SAMPLE = ".\\TestImage.tif";
     String patient_id = null;
-    Date timestamp = null;
+    Date timestamp = null;  // also used as DICOM Test ID
+    List<TestImage> testImages;
+
     
-    // NEED TO ADD SUPPORT FOR MULTI IMAGES... maybe add a new Class TestImage?
-    long clinicalTestImage_id = 0;  // to List<long>
-    long clinicalTestImage_length = 0;   // to List<long>
-    List<Long> ids;
-    List<Long> lengths;
-    List<String> testImagePaths;
-
     public DICOM(List<String> imagePaths) {
-        this.testImagePaths = imagePaths.stream().collect(Collectors.toList());
 
+        testImages = new ArrayList<>();
+        for (String image : imagePaths) {
+            this.testImages.add(new TestImage(image));
+        }
     }
 
     @Override
     public String toString() {   // add support for Multi images
+        String stringOfAllTestImages = "";
+        for (TestImage image : this.testImages) {
+            stringOfAllTestImages += image.toString() + '\n';
+        }
+
         return "\nDICOM"
                 + "\n   patient_id =\t\t" + patient_id
                 + "\n   timestamp =\t\t" + timestamp
-                + "\n   clinical test image ID =\t\t" + clinicalTestImage_id
-                + "\n   clinical test image length =\t\t" + clinicalTestImage_length
-                + "\n   clinical test image filenames =\t" + getTestImagePathsToString();
+                + '\n' + stringOfAllTestImages;
     }
 
     public String getPatient_id() {
@@ -57,28 +60,8 @@ public class DICOM {
         this.timestamp = timestamp;
     }
 
-    public long getClinicalTestImage_id() {
-        return clinicalTestImage_id;
-    }
-
-    public void setClinicalTestImage_id(long clinicalTestImage_id) {
-        this.clinicalTestImage_id = clinicalTestImage_id;
-    }
-
-    public List<String> getClinicalTestFilePathsInInstrument() {
-        return testImagePaths;
-    }
-
-    String getTestImagePathsToString() {
-        return String.join(", \n\t\t", testImagePaths);
-    }
-
-    public long getClinicalTestImage_length() {
-        return clinicalTestImage_length;
-    }
-
-    public void setClinicalTestImage_length(long clinicalTestImage_length) {
-        this.clinicalTestImage_length = clinicalTestImage_length;
+    public List<TestImage> getTestImages() {
+        return testImages;
     }
 
 }

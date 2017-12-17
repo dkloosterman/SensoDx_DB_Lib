@@ -253,16 +253,24 @@ public class JDBCqueries {
     public long insertClinicalTestInstance(TestInstance test) {
 
         try {
+            boolean result = false;
             /*
              (cartridge_id, instrument_id, patient_id, technician_id, doctor_id, 
              raw_assay_data, analysis_result, clinical_test_timestamp)
              */
+            
+//            List<Long> rawDataList = test.raw_assay_data;
+//            String getDataStr = "";
+//            for(Long data: rawDataList){
+//                getDataStr += "test.data + ";
+//            }
+            
             sql = "INSERT INTO Clinical_Test_Instance "
                     + "(cartridge_id, instrument_id, patient_id, technician_id, doctor_id, raw_assay_data, analysis_result, clinical_test_timestamp) "
                     + "VALUES "
                     + "('" + test.getCartridge_id() + "', '" + test.getInstrument_id()
                     + "', '" + test.getPatient_id() + "', '" + test.getTechnician_id()
-                    + "', '" + test.getDoctor_id() + "', '" + test.getRaw_assay_data()
+                    + "', '" + test.getDoctor_id() + "', '" + test.getImage_id_str()
                     + "', '" + test.getAnalysis_result()
                     + "', '" + test.getClinical_test_timestamp() + "')";
 
@@ -340,9 +348,10 @@ public class JDBCqueries {
         }
     }
 
-    public long insertClinicalTestImage(DICOM dicom) {
+    public boolean insertClinicalTestImages(DICOM dicom) {
 
         PreparedStatement psmnt = null;
+        boolean result = false;
 
         try {
             /*
@@ -358,12 +367,12 @@ public class JDBCqueries {
             currentTimestamp = currentTimestamp.replace(":", "");
             currentTimestamp = currentTimestamp.replace(".", "");
             currentTimestamp = currentTimestamp.replace("-", "");
-
-            List<String> imagePaths = dicom.getClinicalTestFilePathsInInstrument();
-            Iterator<String> iterator = imagePaths.iterator();
             
-            while (iterator.hasNext()) {
-                File imageFile = new File(iterator.next());
+            List<TestImage> images = dicom.getTestImages();
+            for(TestImage image : images){
+                
+
+                File imageFile = new File(image.getTestImagePath());
                 FileInputStream fis = new FileInputStream(imageFile);
                 psmnt = conn.prepareStatement("INSERT INTO Clinical_Test_Images(image, image_timestamp) " + "VALUES(?,?)");
                 psmnt.setBinaryStream(1, (InputStream) fis, (int) (imageFile.length()));
@@ -374,8 +383,8 @@ public class JDBCqueries {
                     rs = stmt.executeQuery(sql);
 
                     while (rs.next()) {
-                        dicom.setClinicalTestImage_id(rs.getLong("clinical_test_image_counter"));
-                        dicom.setClinicalTestImage_length(imageFile.length());
+                        image.setClinicalTestImage_id(rs.getLong("clinical_test_image_counter"));
+                        image.setClinicalTestImage_length(imageFile.length());
                     }
                     System.out.println("Image Uploaded successfully !");
 
@@ -385,6 +394,7 @@ public class JDBCqueries {
 
                 psmnt.close();
                 fis.close();
+                result = true;
             }
 
         } catch (SQLException e) {
@@ -398,7 +408,9 @@ public class JDBCqueries {
         } finally {
             //finally block used to close resources
 
-            return (dicom.getClinicalTestImage_id());
+//            return (dicom.getClinicalTestImage_id());
+            return result;
+
         }   //end finally try
     }
 
@@ -444,7 +456,7 @@ public class JDBCqueries {
                 test.setPatient_id(rs.getString("patient_id"));
                 test.setTechnician_id(rs.getString("technician_id"));
                 test.setDoctor_id(rs.getString("doctor_id"));
-                test.setRaw_assay_data(rs.getLong("raw_assay_data"));
+                test.setImage_id_str(rs.getString("raw_assay_data"));
                 test.setAnalysis_result(rs.getFloat("analysis_result"));
                 test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
             }
