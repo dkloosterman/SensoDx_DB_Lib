@@ -76,14 +76,14 @@ public class TestInstance {
 
                     List<TestImage> images = this.dicom.testImages;
                     this.image_id_list.clear();
-                    this.image_id_str = null;
+                    this.image_id_str = "";
                     Long id;
 
                     for (TestImage image : images) {
 
                         id = image.getClinicalTestImage_id();
                         this.image_id_list.add(id);
-                        this.image_id_str += id.toString();
+                        this.image_id_str += id.toString() + ":";
                     }
 
                 } else {
