@@ -88,17 +88,21 @@ public class JDBCqueries {
         }   //end finally try
     }
 
-    public ArrayList getAllCartridgeIDs() {
+    public boolean isCartridgeValidToUse(String forCartID) {
 
-        ArrayList<String> allIDs = new ArrayList<String>();
+        boolean result = true;
 
+        // the following line is for test only
+        // uncomment and put a previously used cardridege ID here to confirm test then fails
+//        forCartID = "20171229111059589";
         try {
-
-            sql = "SELECT cartridge_id FROM Cartridge_Manufactured";
+            sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                allIDs.add(rs.getString("cartridge_id"));
+                // if this cartridge ID was found in a prior test instance, 
+                //    then it is NOT valid for another test
+                result = false;
             } // end while (rs.next()) 
 
         } catch (SQLException e) {
@@ -113,7 +117,7 @@ public class JDBCqueries {
             //finally block used to close resources
 
         }   //end finally
-        return (allIDs);
+        return (result);
     }
 
     public void insertCartridge(Cartridge cartridge) {
@@ -258,13 +262,12 @@ public class JDBCqueries {
              (cartridge_id, instrument_id, patient_id, technician_id, doctor_id, 
              raw_assay_data, analysis_result, clinical_test_timestamp)
              */
-            
+
 //            List<Long> rawDataList = test.raw_assay_data;
 //            String getDataStr = "";
 //            for(Long data: rawDataList){
 //                getDataStr += "test.data + ";
 //            }
-            
             sql = "INSERT INTO Clinical_Test_Instance "
                     + "(cartridge_id, instrument_id, patient_id, technician_id, doctor_id, raw_assay_data, analysis_result, clinical_test_timestamp) "
                     + "VALUES "
@@ -300,7 +303,7 @@ public class JDBCqueries {
         }   //end finally try
     }
 
-    public long getClinicalTestImage(long clinical_test_instance_counter, String targetFile) {
+    public long getClinicalTestImage(long clinical_test_instance_id, String targetFile) {
 
         long lengthOfFile = 0;
 
@@ -319,7 +322,7 @@ public class JDBCqueries {
             Blob blob;
 
             sql = "SELECT * FROM Clinical_Test_Images WHERE clinical_test_image_counter = '"
-                    + clinical_test_instance_counter + "'";
+                    + clinical_test_instance_id + "'";
             PreparedStatement psmnt = conn.prepareStatement(sql);
             rs = psmnt.executeQuery();
 
@@ -367,10 +370,9 @@ public class JDBCqueries {
             currentTimestamp = currentTimestamp.replace(":", "");
             currentTimestamp = currentTimestamp.replace(".", "");
             currentTimestamp = currentTimestamp.replace("-", "");
-            
+
             List<TestImage> images = dicom.getTestImages();
-            for(TestImage image : images){
-                
+            for (TestImage image : images) {
 
                 File imageFile = new File(image.getTestImagePath());
                 FileInputStream fis = new FileInputStream(imageFile);

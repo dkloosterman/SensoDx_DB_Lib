@@ -17,7 +17,10 @@ public class TestImage {
 
     @Override
     public String toString() {
-        return "TestImage{" + "clinicalTestImage_id=" + clinicalTestImage_id + ", clinicalTestImage_length=" + clinicalTestImage_length + ", testImagePath=" + testImagePath + '}';
+        return "\nTest Image"
+                + "\n   clinicalTestImage_id=\t\t" + clinicalTestImage_id
+                + "\n   clinicalTestImage_length=\t\t" + clinicalTestImage_length
+                + "\n   testImagePath=\t\t" + testImagePath;
     }
 
     public TestImage(String imagePath) {

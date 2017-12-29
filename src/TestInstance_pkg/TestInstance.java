@@ -70,43 +70,60 @@ public class TestInstance {
             this.dicom.setPatient_id(this.patient_id);
             this.dicom.setTimestamp(this.clinical_test_timestamp);
 
-            if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
+            if (queries.isCartridgeValidToUse(this.cartridge_id)) {
 
-                if (queries.insertClinicalTestImages(this.dicom)) {
+                if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
 
-                    List<TestImage> images = this.dicom.testImages;
-                    this.image_id_list.clear();
-                    this.image_id_str = "";
-                    Long id;
+                    if (queries.insertClinicalTestImages(this.dicom)) {
 
-                    for (TestImage image : images) {
+                        List<TestImage> images = this.dicom.testImages;
+                        this.image_id_list.clear();
+                        this.image_id_str = "";
+                        Long id;
 
-                        id = image.getClinicalTestImage_id();
-                        this.image_id_list.add(id);
-                        this.image_id_str += id.toString() + ":";
+                        for (TestImage image : images) {
+
+                            id = image.getClinicalTestImage_id();
+                            this.image_id_list.add(id);
+                            this.image_id_str += id.toString() + ":";
+                        }
+
+                    } else {
+                        Errors error = new Errors();
+
+                        error.buildErrorObject_UnableToAddClinicalTestImageToDatabase(this.instrument_id,
+                                this.cartridge_id,
+                                null);
+
+                        this.queries.insertError(error);
+
+                        this.testResultString = error.toString();
+                        error = null;
+
+                        testResult = false;
                     }
+                    this.setAnalysis_result(Math.random());
+                    queries.insertClinicalTestInstance(this);
 
                 } else {
                     Errors error = new Errors();
 
-                    error.buildErrorObject_UnableToAddClinicalTestImageToDatabase(this.instrument_id,
+                    error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
                             this.cartridge_id,
                             null);
 
                     this.queries.insertError(error);
 
                     this.testResultString = error.toString();
+
                     error = null;
 
                     testResult = false;
                 }
-                this.setAnalysis_result(Math.random());
-                queries.insertClinicalTestInstance(this);
-
             } else {
                 Errors error = new Errors();
 
-                error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
+                error.buildErrorObject_CartridgePreviouslyUsed(this.instrument_id,
                         this.cartridge_id,
                         null);
 
