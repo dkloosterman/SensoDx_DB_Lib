@@ -159,6 +159,35 @@ public class JDBCqueries {
 
         }   //end finally try
     }
+    
+    public ArrayList getAllCartridgeIDs() {
+
+        ArrayList<String> allCartIDs = new ArrayList<String>();
+
+        try {
+
+            sql = "SELECT cartridge_id FROM Cartridge_Manufactured";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                allCartIDs.add(rs.getString("cartridge_id"));
+            } // end while (rs.next()) 
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally
+        return (allCartIDs);
+    }
+
 
     // Instrument quesries
     public void getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
