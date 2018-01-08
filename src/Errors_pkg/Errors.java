@@ -21,7 +21,7 @@ public class Errors {
     final public String ErrorCode_UnableToAddClinicalTestImageToDatabase = "1002";
     final public String ErrorCode_ClinicalTestImageNotFound = "1003";
     final public String ErrorCode_ClinicalTestImageSetToNull = "1004";
-    final public String ErrorCode_CartridgePreviouslyUsed = "1005";
+    final public String ErrorCode_CartridgeNotValidToUse = "1005";
 
 
     /*
@@ -202,17 +202,17 @@ public class Errors {
         }   //end finally 
     }
 
-    public void buildErrorObject_CartridgePreviouslyUsed(String instrument_id,
+    public void buildErrorObject_CartridgeNotValidToUse(String instrument_id,
             String cartridge_id,
             String testInstance_id) {
 
         try {
 
-            this.setDescription("Unable to run test because cartridge used previously");
+            this.setDescription("Unable to run test because cartridge not in database or was used previously");
             this.setInstrument_id(instrument_id);
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
-            this.setError_code(ErrorCode_CartridgePreviouslyUsed);
+            this.setError_code(ErrorCode_CartridgeNotValidToUse);
             this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {

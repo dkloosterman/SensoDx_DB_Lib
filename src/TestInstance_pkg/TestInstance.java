@@ -123,7 +123,7 @@ public class TestInstance {
             } else {
                 Errors error = new Errors();
 
-                error.buildErrorObject_CartridgePreviouslyUsed(this.instrument_id,
+                error.buildErrorObject_CartridgeNotValidToUse(this.instrument_id,
                         this.cartridge_id,
                         null);
 

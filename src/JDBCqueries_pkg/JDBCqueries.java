@@ -90,18 +90,24 @@ public class JDBCqueries {
 
     public boolean isCartridgeValidToUse(String forCartID) {
 
-        boolean result = true;
+        boolean result = false;
 
         // the following line is for test only
         // uncomment and put a previously used cardridege ID here to confirm test then fails
 //        forCartID = "20171229111059589";
         try {
-            sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
+            // verify that cartridge ID is in database
+            sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                // if this cartridge ID was found in a prior test instance, 
-                //    then it is NOT valid for another test
+                result = true;
+            }
+            
+            //verofy that cartridge ID not used in previous test
+            sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
                 result = false;
             } // end while (rs.next()) 
 
