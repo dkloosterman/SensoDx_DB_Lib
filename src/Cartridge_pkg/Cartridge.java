@@ -16,7 +16,7 @@ import static TestInstance_pkg.TestInstance.ASSAY_FIELD_LENGTH;
 public class Cartridge {
 
     public enum DeploymentType {
-        Virtual, LDT, ResearchAndDevelopment, Product, Manufacturing
+        Virtual, LDT, ResearchAndDevelopment, Product, Manufacturing, TrustMe
     };
 
     /*
