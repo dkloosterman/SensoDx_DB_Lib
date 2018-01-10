@@ -496,6 +496,9 @@ public class JDBCqueries {
                 test.setImage_id_str(rs.getString("raw_assay_data"));
                 test.setAnalysis_result(rs.getFloat("analysis_result"));
                 test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
+                
+                test.dicom.setPatient_id(test.getPatient_id());
+                test.dicom.setTimestamp(test.getClinical_test_timestamp());
             }
 
         } catch (SQLException e) {
