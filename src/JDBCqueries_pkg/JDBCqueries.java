@@ -341,6 +341,7 @@ public class JDBCqueries {
     public long getClinicalTestImage(long clinical_test_instance_id, String targetFile) {
 
         long lengthOfFile = 0;
+        ResultSet rset = null;
 
         try {
             /*
@@ -359,10 +360,10 @@ public class JDBCqueries {
             sql = "SELECT * FROM Clinical_Test_Images WHERE clinical_test_image_counter = '"
                     + clinical_test_instance_id + "'";
             PreparedStatement psmnt = conn.prepareStatement(sql);
-            rs = psmnt.executeQuery();
+            rset = psmnt.executeQuery();
 
-            while (rs.next()) {
-                blob = rs.getBlob("image");
+            while (rset.next()) {
+                blob = rset.getBlob("image");
                 b = blob.getBytes(1, (int) blob.length());
                 fos.write(b);
                 lengthOfFile = blob.length();
@@ -518,6 +519,7 @@ public class JDBCqueries {
 
                     testImage.setClinicalTestImage_id(Long.parseLong(id));
 
+                    // following line causing SQL error
                     testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
 
                     System.out.println(testImage.toString());
@@ -530,7 +532,6 @@ public class JDBCqueries {
                         }
                     }
                 }
-
             }
 
         } catch (SQLException e) {
