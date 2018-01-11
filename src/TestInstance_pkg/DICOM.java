@@ -44,6 +44,10 @@ public class DICOM {
                 + '\n' + stringOfAllTestImages;
     }
 
+    public void addTestImage(TestImage path){
+        this.testImages.add(path);
+    }
+    
     public String getPatient_id() {
         return patient_id;
     }

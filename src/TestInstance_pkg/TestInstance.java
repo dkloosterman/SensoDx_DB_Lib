@@ -57,6 +57,17 @@ public class TestInstance {
 
     }
 
+    public List<String> ImageIDstring2List() {
+        List<String> images = new ArrayList<>();
+        String[] idList = this.getImage_id_str().split(":");
+        
+        for(String id : idList){
+            images.add(id);
+        }
+
+        return(images);
+    }
+
     public boolean processTest(Instrument instrument, Cartridge cartridge) {
         boolean testResult = true;  // return true if test successfully processed
 

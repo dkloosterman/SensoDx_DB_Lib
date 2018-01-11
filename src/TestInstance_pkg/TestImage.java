@@ -26,7 +26,12 @@ public class TestImage {
     public TestImage(String imagePath) {
         this.testImagePath = imagePath;
     }
-
+    
+//    public TestImage(long id) {
+//        this.clinicalTestImage_id = id;
+//        this.testImagePath = null;
+//    }
+    
     public long getClinicalTestImage_id() {
         return clinicalTestImage_id;
     }

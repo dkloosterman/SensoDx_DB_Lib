@@ -7,6 +7,7 @@ import Cartridge_pkg.Cartridge;
 import TestInstance_pkg.*;
 import Errors_pkg.Errors;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Date;
 
 /**
@@ -103,7 +104,7 @@ public class JDBCqueries {
             while (rs.next()) {
                 result = true;
             }
-            
+
             //verofy that cartridge ID not used in previous test
             sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
@@ -159,7 +160,7 @@ public class JDBCqueries {
 
         }   //end finally try
     }
-    
+
     public ArrayList getAllCartridgeIDs() {
 
         ArrayList<String> allCartIDs = new ArrayList<String>();
@@ -187,7 +188,6 @@ public class JDBCqueries {
         }   //end finally
         return (allCartIDs);
     }
-
 
     // Instrument quesries
     public void getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
@@ -480,7 +480,7 @@ public class JDBCqueries {
         return (allIDs);
     }
 
-    public void getTestInstanceInfo(String testID, TestInstance test) {
+    public void getTestInstanceInfo(String testID, TestInstance test, boolean deleteImages) {
 
         try {
             sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
@@ -496,15 +496,105 @@ public class JDBCqueries {
                 test.setImage_id_str(rs.getString("raw_assay_data"));
                 test.setAnalysis_result(rs.getFloat("analysis_result"));
                 test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
-                
+
                 test.dicom.setPatient_id(test.getPatient_id());
                 test.dicom.setTimestamp(test.getClinical_test_timestamp());
+
+                List<String> idList = new ArrayList<>();
+                idList = test.ImageIDstring2List();
+                System.out.println("\nTest id: " + testID + " has " + test.ImageIDstring2List().size() + " images");
+
+                String filePath = ".\\retrieved\\";
+                File fileDir = new File(filePath);
+
+                for (String id : idList) {
+                    String fileName = "id_" + id + ".tif";
+
+                    if (!fileDir.exists()) {
+                        new File(filePath).mkdir();
+                    }
+                    TestImage testImage = new TestImage(filePath + fileName);
+                    test.dicom.addTestImage(testImage);
+
+                    testImage.setClinicalTestImage_id(Long.parseLong(id));
+
+                    testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
+
+                    System.out.println(testImage.toString());
+                    System.out.println("Image ID is: " + id);
+
+                    if (deleteImages) {
+                        File f = new File(filePath + fileName);
+                        if (f.exists() && !f.isDirectory()) {
+                            f.delete();
+                        }
+                    }
+                }
+
             }
 
         } catch (SQLException e) {
             // handle the error
             System.out.println("\n" + "SQL Exception " + e.getMessage());
+//            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+        }   //end finally try
+    }
+
+    public void getTestInstanceInfo_noImages(String testID, TestInstance test) {
+
+        try {
+            sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                test.setClinical_test_instance_counter(rs.getInt("clinical_test_instance_counter"));
+                test.setCartridge_id(rs.getString("cartridge_id"));
+                test.setInstrument_id(rs.getString("instrument_id"));
+                test.setPatient_id(rs.getString("patient_id"));
+                test.setTechnician_id(rs.getString("technician_id"));
+                test.setDoctor_id(rs.getString("doctor_id"));
+                test.setImage_id_str(rs.getString("raw_assay_data"));
+                test.setAnalysis_result(rs.getFloat("analysis_result"));
+                test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
+
+                test.dicom.setPatient_id(test.getPatient_id());
+                test.dicom.setTimestamp(test.getClinical_test_timestamp());
+                /*
+                List<String> idList = new ArrayList<>();
+                idList = test.ImageIDstring2List();
+                System.out.println("\nTest id: " + testID + " has " + test.ImageIDstring2List().size() + " images");
+                
+                for (String id : idList) {
+                    String fileName = "id_" + id + ".tif";
+                    String filePath = ".\\retrieved\\";
+                    File fileDir = new File(filePath);
+                    if (!fileDir.exists()) {
+                        new File(filePath).mkdir();
+                    }
+                    TestImage testImage = new TestImage(filePath + fileName);
+                    test.dicom.addTestImage(testImage);
+                    
+                    testImage.setClinicalTestImage_id(Long.parseLong(id));
+
+                    testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
+   
+                    System.out.println(testImage.toString());
+                    System.out.println("Image ID is: " + id);
+                }
+                 */
+            }
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+//            System.exit(0);
         } catch (Exception e) {
             // handle the error
             System.out.println("\n" + "General Exception " + e.getMessage());
