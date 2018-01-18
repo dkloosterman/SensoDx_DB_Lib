@@ -60,12 +60,12 @@ public class TestInstance {
     public List<String> ImageIDstring2List() {
         List<String> images = new ArrayList<>();
         String[] idList = this.getImage_id_str().split(":");
-        
-        for(String id : idList){
+
+        for (String id : idList) {
             images.add(id);
         }
 
-        return(images);
+        return (images);
     }
 
     public boolean processTest(Instrument instrument, Cartridge cartridge) {
@@ -113,8 +113,14 @@ public class TestInstance {
 
                         testResult = false;
                     }
-                    this.setAnalysis_result(Math.random());
-                    queries.insertClinicalTestInstance(this);
+
+                    //  Now go get diagnostic test result
+                    if (this.getDiagnosticTestResult(this)) {
+                        queries.insertClinicalTestInstance(this);
+                    }
+                    else{
+                        System.out.println("Unable to generate a diagnostic test result for this test");
+                    }
 
                 } else {
                     Errors error = new Errors();
@@ -154,6 +160,16 @@ public class TestInstance {
             return (testResult);
         }   //end finally try
 
+    }
+
+    private boolean getDiagnosticTestResult(TestInstance test) {
+        // TEMP PACEHOLDER:
+        //   in the future, this may be a call to a REST API or a call to a component in the Instrument
+        boolean result = true;
+
+        test.setAnalysis_result(Math.random() + this.dicom.testImages.size());
+
+        return result;
     }
 
     @Override
