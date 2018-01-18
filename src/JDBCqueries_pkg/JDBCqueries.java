@@ -201,13 +201,6 @@ public class JDBCqueries {
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setInstallation_timestamp(rs.getTimestamp("installation_timestamp"));
                 instrument.setDeployment_type(rs.getString("deployment_type"));
-
-                // example of how to use the Instrument.DeploymentType enum
-//                if(instrument.getDeployment_type().equals(Instrument.DeploymentType.LDT.toString())){
-//                    System.out.println("a deployment to LDT");
-//                }
-//                System.out.println("enum value: >" + Instrument.DeploymentType.LDT + "<");
-//                System.out.println("instrument value: >" + instrument.getDeployment_type() + "<");
                 instrument.setCustomer_id(rs.getString("customer_id"));
                 instrument.setCustomer_name(rs.getString("customer_name"));
                 instrument.setCustomer_location(rs.getString("customer_location"));
@@ -215,6 +208,7 @@ public class JDBCqueries {
                 instrument.setContact_email(rs.getString("contact_email"));
                 instrument.setCustomer_since(rs.getTimestamp("customer_since"));
                 instrument.setAssay_types_enabled(rs.getInt("assay_types_enabled"));
+                instrument.setCartridgeTrustMeAllowed(rs.getBoolean("cartridge_trustme_allowed"));
             }
 
         } catch (SQLException e) {

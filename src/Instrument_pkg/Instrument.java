@@ -14,7 +14,7 @@ import java.util.Date;
  * @author David Kloosterman
  */
 public class Instrument {
-    
+
     public enum DeploymentType {
         Virtual, LDT, ResearchAndDevelopment, Product, Manufacturing
     };
@@ -43,6 +43,7 @@ public class Instrument {
        contact_email VARCHAR (50),
        customer_since DATE DEFAULT '0000-00-00',
        assay_types_enabled VARCHAR (50),
+       cartridge_trustme_allowed BIT NULL DEFAULT 0,
        PRIMARY KEY (instrument_id )  );
      */
     // Instrument Mfg. Info
@@ -64,6 +65,7 @@ public class Instrument {
     String contact_email = null;
     Date customer_since = null;
     int assay_types_enabled = 0;
+    boolean cartridgeTrustMeAllowed = false;
 
     public Instrument() {
 
@@ -90,7 +92,8 @@ public class Instrument {
                 + "\n   contact_telephone =\t" + contact_telephone
                 + "\n   contact_email =\t" + contact_email
                 + "\n   customer_since =\t" + customer_since
-                + "\n   assay_types_enabled =\t" + binaryAssayTypesEnabled;
+                + "\n   assay_types_enabled =\t" + binaryAssayTypesEnabled
+                + "\n   cartridgeTrustMeAllowed =\t" + cartridgeTrustMeAllowed;
     }
 
     public Date getManufactured_timestamp() {
@@ -213,4 +216,15 @@ public class Instrument {
         this.deployment_type = deployment_type;
     }
 
+    public boolean isCartridgeTrustMeAllowed() {
+        return cartridgeTrustMeAllowed;
+    }
+
+    public void setCartridgeTrustMeAllowed(boolean cartridgeTrustMeAllowed) {
+        this.cartridgeTrustMeAllowed = cartridgeTrustMeAllowed;
+    }
+    
+    public boolean getCartridgeTrustMeAllowed() {
+        return cartridgeTrustMeAllowed;
+    }
 }
