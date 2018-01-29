@@ -21,6 +21,9 @@ public class TestInstance {
     public static final int NO_ASSAY_TEST = 0b0000000000000000;
     public static final int CARDIAC_WELLNESS_TEST = 0b0000000000000001;
     public static final int ORAL_CANCER_TEST = 0b0000000000000010;
+    public static final int TRUST_ME = 0b1111111111111111;
+
+//    public static final boolean UseDiagAlgHF_interface = false;
 
     /*
     CREATE TABLE Clinical_Test_Instance (
@@ -42,6 +45,7 @@ public class TestInstance {
     String doctor_id = null;
     List<Long> image_id_list;
     String image_id_str = null;
+
     double analysis_result = 0;
     Date clinical_test_timestamp = null;
 
@@ -115,10 +119,11 @@ public class TestInstance {
                     }
 
                     //  Now go get diagnostic test result
+//                    String diagTestResult = this.getDiagnosticTestResult(this);
+//                    this.setAnalysis_result(Double.parseDouble(diagTestResult));
                     if (this.getDiagnosticTestResult(this)) {
                         queries.insertClinicalTestInstance(this);
-                    }
-                    else{
+                    } else {
                         System.out.println("Unable to generate a diagnostic test result for this test");
                     }
 
@@ -165,9 +170,15 @@ public class TestInstance {
     private boolean getDiagnosticTestResult(TestInstance test) {
         // TEMP PACEHOLDER:
         //   in the future, this may be a call to a REST API or a call to a component in the Instrument
+        //    or a JNI call.  All TBD depending on state of machine control and diag. alg. components
         boolean result = true;
 
-        test.setAnalysis_result(Math.random() + this.dicom.testImages.size());
+//        if (UseDiagAlgHF_interface) {
+//
+//        } else {
+        test.setAnalysis_result(Math.random());
+//            result = Double.toString(Math.random());
+//        }
 
         return result;
     }
@@ -214,6 +225,10 @@ public class TestInstance {
 
     public String getPatient_id() {
         return patient_id;
+    }
+
+    public List<Long> getImage_id_list() {
+        return image_id_list;
     }
 
     public void setPatient_id(String patient_id) {
