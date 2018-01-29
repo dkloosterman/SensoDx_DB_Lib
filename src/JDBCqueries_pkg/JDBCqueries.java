@@ -525,6 +525,7 @@ public class JDBCqueries {
                 String filePath = ".\\retrieved\\";
                 File fileDir = new File(filePath);
 
+                test.dicom.clearImageList();
                 for (String id : idList) {
                     String fileName = "id_" + id + ".tif";
 

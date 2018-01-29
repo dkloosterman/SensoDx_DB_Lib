@@ -48,6 +48,9 @@ public class DICOM {
         this.testImages.add(path);
     }
     
+    public void clearImageList(){
+        this.testImages.clear();
+    }
     public String getPatient_id() {
         return patient_id;
     }
