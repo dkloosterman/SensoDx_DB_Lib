@@ -292,11 +292,7 @@ public class JDBCqueries {
              raw_assay_data, analysis_result, clinical_test_timestamp)
              */
 
-//            List<Long> rawDataList = test.raw_assay_data;
-//            String getDataStr = "";
-//            for(Long data: rawDataList){
-//                getDataStr += "test.data + ";
-//            }
+
             sql = "INSERT INTO Clinical_Test_Instance "
                     + "(cartridge_id, instrument_id, patient_id, technician_id, doctor_id, raw_assay_data, analysis_result, clinical_test_timestamp) "
                     + "VALUES "
@@ -316,6 +312,33 @@ public class JDBCqueries {
                 test.setClinical_test_instance_counter(rs.getLong("clinical_test_instance_counter"));
 
             }
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+
+            return (test.getClinical_test_instance_counter());
+        }   //end finally try
+    }
+
+    public long updateClinicalTestInstanceResultScore(TestInstance test) {
+
+        try {
+            boolean result = false;
+            
+            sql = "UPDATE Clinical_Test_Instance "
+                    + "SET analysis_result = '" + test.getAnalysis_result() + "'"
+                    + " WHERE clinical_test_instance_counter = '" + test.getClinical_test_instance_counter() + "'";
+
+            // get and display data for seleted Instrument ID
+            stmt.executeUpdate(sql);
 
         } catch (SQLException e) {
             // handle the error
