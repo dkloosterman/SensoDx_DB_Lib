@@ -287,11 +287,6 @@ public class JDBCqueries {
 
         try {
             boolean result = false;
-            /*
-             (cartridge_id, instrument_id, patient_id, technician_id, doctor_id, 
-             raw_assay_data, analysis_result, clinical_test_timestamp)
-             */
-
 
             sql = "INSERT INTO Clinical_Test_Instance "
                     + "(cartridge_id, instrument_id, patient_id, technician_id, doctor_id, raw_assay_data, analysis_result, clinical_test_timestamp) "
@@ -302,15 +297,14 @@ public class JDBCqueries {
                     + "', '" + test.getAnalysis_result()
                     + "', '" + test.getClinical_test_timestamp() + "')";
 
-            // get and display data for seleted Instrument ID
             stmt.executeUpdate(sql);
 
+            // following code gets the database auto generated test ID
             sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + test.getCartridge_id() + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
                 test.setClinical_test_instance_counter(rs.getLong("clinical_test_instance_counter"));
-
             }
 
         } catch (SQLException e) {
@@ -332,7 +326,7 @@ public class JDBCqueries {
 
         try {
             boolean result = false;
-            
+
             sql = "UPDATE Clinical_Test_Instance "
                     + "SET analysis_result = '" + test.getAnalysis_result() + "'"
                     + " WHERE clinical_test_instance_counter = '" + test.getClinical_test_instance_counter() + "'";
@@ -498,7 +492,7 @@ public class JDBCqueries {
         return (allIDs);
     }
 
-    public void getTestInstanceInfo(String testID, TestInstance test, boolean deleteImages) {
+    public void getTestInstanceInfo(String testID, TestInstance test, boolean getTestImages, boolean deleteTestImages) {
 
         try {
             sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
@@ -518,96 +512,41 @@ public class JDBCqueries {
                 test.dicom.setPatient_id(test.getPatient_id());
                 test.dicom.setTimestamp(test.getClinical_test_timestamp());
 
-                List<String> idList = new ArrayList<>();
-                idList = test.ImageIDstring2List();
-                System.out.println("\nTest id: " + testID + " has " + test.ImageIDstring2List().size() + " images");
+                if (getTestImages) {
 
-                String filePath = ".\\retrieved\\";
-                File fileDir = new File(filePath);
+                    List<String> idList = new ArrayList<>();
+                    idList = test.ImageIDstring2List();
+                    System.out.println("\nTest id: " + testID + " has " + test.ImageIDstring2List().size() + " images");
 
-                test.dicom.clearImageList();
-                for (String id : idList) {
-                    String fileName = "id_" + id + ".tif";
+                    String filePath = ".\\retrieved\\";
+                    File fileDir = new File(filePath);
 
-                    if (!fileDir.exists()) {
-                        new File(filePath).mkdir();
-                    }
-                    TestImage testImage = new TestImage(filePath + fileName);
-                    test.dicom.addTestImage(testImage);
+                    test.dicom.clearImageList();
+                    for (String id : idList) {
+                        String fileName = "id_" + id + ".tif";
 
-                    testImage.setClinicalTestImage_id(Long.parseLong(id));
+                        if (!fileDir.exists()) {
+                            new File(filePath).mkdir();
+                        }
+                        TestImage testImage = new TestImage(filePath + fileName);
+                        test.dicom.addTestImage(testImage);
 
-                    // following line causing SQL error
-                    testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
+                        testImage.setClinicalTestImage_id(Long.parseLong(id));
 
-                    System.out.println(testImage.toString());
-                    System.out.println("Image ID is: " + id);
+                        // following line causing SQL error
+                        testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
 
-                    if (deleteImages) {
-                        File f = new File(filePath + fileName);
-                        if (f.exists() && !f.isDirectory()) {
-                            f.delete();
+                        System.out.println(testImage.toString());
+                        System.out.println("Image ID is: " + id);
+
+                        if (deleteTestImages) {
+                            File f = new File(filePath + fileName);
+                            if (f.exists() && !f.isDirectory()) {
+                                f.delete();
+                            }
                         }
                     }
                 }
-            }
-
-        } catch (SQLException e) {
-            // handle the error
-            System.out.println("\n" + "SQL Exception " + e.getMessage());
-//            System.exit(0);
-        } catch (Exception e) {
-            // handle the error
-            System.out.println("\n" + "General Exception " + e.getMessage());
-            System.exit(0);
-        } finally {
-            //finally block used to close resources
-
-        }   //end finally try
-    }
-
-    public void getTestInstanceInfo_noImages(String testID, TestInstance test) {
-
-        try {
-            sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
-            rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                test.setClinical_test_instance_counter(rs.getInt("clinical_test_instance_counter"));
-                test.setCartridge_id(rs.getString("cartridge_id"));
-                test.setInstrument_id(rs.getString("instrument_id"));
-                test.setPatient_id(rs.getString("patient_id"));
-                test.setTechnician_id(rs.getString("technician_id"));
-                test.setDoctor_id(rs.getString("doctor_id"));
-                test.setImage_id_str(rs.getString("raw_assay_data"));
-                test.setAnalysis_result(rs.getFloat("analysis_result"));
-                test.setClinical_test_timestamp(rs.getTimestamp("clinical_test_timestamp"));
-
-                test.dicom.setPatient_id(test.getPatient_id());
-                test.dicom.setTimestamp(test.getClinical_test_timestamp());
-                /*
-                List<String> idList = new ArrayList<>();
-                idList = test.ImageIDstring2List();
-                System.out.println("\nTest id: " + testID + " has " + test.ImageIDstring2List().size() + " images");
-                
-                for (String id : idList) {
-                    String fileName = "id_" + id + ".tif";
-                    String filePath = ".\\retrieved\\";
-                    File fileDir = new File(filePath);
-                    if (!fileDir.exists()) {
-                        new File(filePath).mkdir();
-                    }
-                    TestImage testImage = new TestImage(filePath + fileName);
-                    test.dicom.addTestImage(testImage);
-                    
-                    testImage.setClinicalTestImage_id(Long.parseLong(id));
-
-                    testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
-   
-                    System.out.println(testImage.toString());
-                    System.out.println("Image ID is: " + id);
-                }
-                 */
             }
 
         } catch (SQLException e) {

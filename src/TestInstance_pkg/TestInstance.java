@@ -118,17 +118,6 @@ public class TestInstance {
                         testResult = false;
                     }
 
-                    //  Now go get diagnostic test result
-//                    String diagTestResult = this.getDiagnosticTestResult(this);
-//                    this.setAnalysis_result(Double.parseDouble(diagTestResult));
-///////////////////////////////////////////
-//                    if (this.getDiagnosticTestResult(this)) {
-//                        queries.insertClinicalTestInstance(this);
-//                    } else {
-//                        System.out.println("Unable to generate a diagnostic test result for this test");
-//                    }
-////////////////////////////////////////////
-
                 } else {
                     Errors error = new Errors();
 
@@ -167,22 +156,6 @@ public class TestInstance {
             return (testResult);
         }   //end finally try
 
-    }
-
-    private boolean getDiagnosticTestResult(TestInstance test) {
-        // TEMP PACEHOLDER:
-        //   in the future, this may be a call to a REST API or a call to a component in the Instrument
-        //    or a JNI call.  All TBD depending on state of machine control and diag. alg. components
-        boolean result = true;
-
-//        if (UseDiagAlgHF_interface) {
-//
-//        } else {
-        test.setAnalysis_result(Math.random());
-//            result = Double.toString(Math.random());
-//        }
-
-        return result;
     }
 
     @Override

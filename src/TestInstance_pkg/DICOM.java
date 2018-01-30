@@ -9,7 +9,6 @@ package TestInstance_pkg;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-//import java.util.stream.Collectors;
 
 /**
  *
@@ -17,12 +16,10 @@ import java.util.List;
  */
 public class DICOM {
 
-//    public static final String TESTFILE_SAMPLE = ".\\TestImage.tif";
     String patient_id = null;
     Date timestamp = null;  // also used as DICOM Test ID
     List<TestImage> testImages;
 
-    
     public DICOM(List<String> imagePaths) {
 
         testImages = new ArrayList<>();
@@ -44,13 +41,14 @@ public class DICOM {
                 + '\n' + stringOfAllTestImages;
     }
 
-    public void addTestImage(TestImage path){
+    public void addTestImage(TestImage path) {
         this.testImages.add(path);
     }
-    
-    public void clearImageList(){
+
+    public void clearImageList() {
         this.testImages.clear();
     }
+
     public String getPatient_id() {
         return patient_id;
     }
