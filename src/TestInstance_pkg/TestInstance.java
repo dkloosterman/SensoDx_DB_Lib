@@ -72,7 +72,7 @@ public class TestInstance {
         return (images);
     }
 
-    public boolean processTest(Instrument instrument, Cartridge cartridge) {
+    public boolean verifyTestParameters(Instrument instrument, Cartridge cartridge) {
         boolean testResult = true;  // return true if test successfully processed
 
         try {
@@ -121,11 +121,13 @@ public class TestInstance {
                     //  Now go get diagnostic test result
 //                    String diagTestResult = this.getDiagnosticTestResult(this);
 //                    this.setAnalysis_result(Double.parseDouble(diagTestResult));
-                    if (this.getDiagnosticTestResult(this)) {
-                        queries.insertClinicalTestInstance(this);
-                    } else {
-                        System.out.println("Unable to generate a diagnostic test result for this test");
-                    }
+///////////////////////////////////////////
+//                    if (this.getDiagnosticTestResult(this)) {
+//                        queries.insertClinicalTestInstance(this);
+//                    } else {
+//                        System.out.println("Unable to generate a diagnostic test result for this test");
+//                    }
+////////////////////////////////////////////
 
                 } else {
                     Errors error = new Errors();
