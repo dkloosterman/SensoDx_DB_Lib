@@ -56,15 +56,18 @@ public class JDBCqueries {
     }
 
     // Cartridge queries
-    public void getCartridgeMfgInfo(String forCartID, Cartridge cartridge) {
+    public boolean getCartridgeMfgInfo(String forCartID, Cartridge cartridge) {
+
+        boolean cartridgeFound = false;
 
         try {
-
+            
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
+                cartridgeFound = true;
                 cartridge.setCartridge_id(rs.getString("cartridge_id"));
                 cartridge.setManufactured_timestamp(rs.getTimestamp("manufactured_timestamp"));
                 cartridge.setDeployment_type((String) rs.getString("deployment_type"));
@@ -85,6 +88,7 @@ public class JDBCqueries {
             System.exit(0);
         } finally {
             //finally block used to close resources
+            return (cartridgeFound);
 
         }   //end finally try
     }
@@ -190,14 +194,18 @@ public class JDBCqueries {
     }
 
     // Instrument quesries
-    public void getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
+    public boolean getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
 
+        boolean instrumentFound = false;
+        
         try {
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Instrument_Deployed WHERE instrument_id = '" + instrID + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
+                instrumentFound = true;
+                
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setInstallation_timestamp(rs.getTimestamp("installation_timestamp"));
                 instrument.setDeployment_type(rs.getString("deployment_type"));
@@ -220,7 +228,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            //finally block used to close resources
+            return(instrumentFound);
 
         }   //end finally try
     }
@@ -253,13 +261,17 @@ public class JDBCqueries {
         return (allInstrIDs);
     }
 
-    public void getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
+    public boolean getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
 
+        boolean instrumentFound = false;
+        
         try {
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Instrument_Manufactured WHERE instrument_id = '" + forInstrID + "'";
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
+                instrumentFound = true;
+                        
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setManufactured_timestamp(rs.getTimestamp("manufactured_timestamp"));
                 instrument.setManufactured_location(rs.getString("manufactured_location"));
@@ -277,7 +289,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            //finally block used to close resources
+            return(instrumentFound);
 
         }   //end finally try
     }
@@ -492,13 +504,16 @@ public class JDBCqueries {
         return (allIDs);
     }
 
-    public void getTestInstanceInfo(String testID, TestInstance test, boolean getTestImages, boolean deleteTestImages) {
+    public boolean  getTestInstanceInfo(String testID, TestInstance test, boolean getTestImages, boolean deleteTestImages) {
 
+        boolean testInstanceFound = false;
+        
         try {
             sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
+                testInstanceFound = true;
                 test.setClinical_test_instance_counter(rs.getInt("clinical_test_instance_counter"));
                 test.setCartridge_id(rs.getString("cartridge_id"));
                 test.setInstrument_id(rs.getString("instrument_id"));
@@ -558,7 +573,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            //finally block used to close resources
+            return(testInstanceFound);
 
         }   //end finally try
     }

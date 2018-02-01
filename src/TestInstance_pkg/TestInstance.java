@@ -76,7 +76,7 @@ public class TestInstance {
         boolean testResult = true;  // return true if test successfully processed
 
         try {
-            this.testResultString = "Test Successfully Completed";
+            this.testResultString = "Test Input Parameters Passed";
 
             this.instrument_id = instrument.getInstrument_id();
             this.cartridge_id = cartridge.getCartridge_id();
@@ -153,6 +153,7 @@ public class TestInstance {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
+            
             return (testResult);
         }   //end finally try
 
@@ -173,7 +174,7 @@ public class TestInstance {
                 + "\n"
                 + dicom.toString();
     }
-
+    
     public long getClinical_test_instance_counter() {
         return clinical_test_instance_counter;
     }
