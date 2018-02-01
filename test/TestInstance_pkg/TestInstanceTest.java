@@ -92,22 +92,22 @@ public class TestInstanceTest {
 
         // Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge
         System.out.println("Start Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge: ");
-        assertTrue(testInstance.processTest(instrumentForCardiacWellness, cartridgeForCardiacWellness));
+        assertFalse(testInstance.verifyTestParameters(instrumentForCardiacWellness, cartridgeForCardiacWellness));
         System.out.println("Completed Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge: ");
 
         // Test Oral Cancer Instrument with Oral Cancer Cartridge
         System.out.println("Start Test Oral Cancer Instrument with Oral Cancer Cartridge: ");
-        assertTrue(testInstance.processTest(instrumentForOralCancer, cartridgeForOralCancer));
+        assertFalse(testInstance.verifyTestParameters(instrumentForOralCancer, cartridgeForOralCancer));
         System.out.println("Completed Test Oral Cancer Instrument with Oral Cancer Cartridge: ");
 
         // Test Cardiac Wellness Instrument with Oral Cancer Cartridge
         System.out.println("Start Test Cardiac Wellness Instrument with Oral Cancer Cartridge: ");
-        assertFalse(testInstance.processTest(instrumentForCardiacWellness, cartridgeForOralCancer));
+        assertFalse(testInstance.verifyTestParameters(instrumentForCardiacWellness, cartridgeForOralCancer));
         System.out.println("Completed Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge: ");
 
         // Test Oral Cancer Instrument with Cardiac Wellness Cartridge
         System.out.println("Start Test Oral Cancer Instrument with Cardiac Wellness Cartridge: ");
-        assertFalse(testInstance.processTest(instrumentForOralCancer, cartridgeForCardiacWellness));
+        assertFalse(testInstance.verifyTestParameters(instrumentForOralCancer, cartridgeForCardiacWellness));
         System.out.println("Completed Test Cardiac Wellness Instrument with Cardiac Wellness Cartridge: ");
 
     }
