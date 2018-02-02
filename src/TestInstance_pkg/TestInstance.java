@@ -21,7 +21,7 @@ public class TestInstance {
     public static final int NO_ASSAY_TEST = 0b0000000000000000;
     public static final int CARDIAC_WELLNESS_TEST = 0b0000000000000001;
     public static final int ORAL_CANCER_TEST = 0b0000000000000010;
-    public static final int TRUST_ME = 0b1111111111111111;
+    public static final int TRUST_ME_ASSAYS_ENABLED = 0b1111111111111111;
 
 //    public static final boolean UseDiagAlgHF_interface = false;
 

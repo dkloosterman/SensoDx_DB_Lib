@@ -552,7 +552,7 @@ public class JDBCqueries {
                         testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
 
                         System.out.println(testImage.toString());
-                        System.out.println("Image ID is: " + id);
+//                        System.out.println("Image ID is: " + id);
 
                         if (deleteTestImages) {
                             File f = new File(filePath + fileName);
