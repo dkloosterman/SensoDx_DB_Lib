@@ -18,11 +18,18 @@ public class JDBCqueries {
 
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/sensodx_sql_db?useSSL=false";
-
+    
+    static final String DB_URL_AWS = "jdbc:mysql://dkloostermanrdb.czkvpn4qk8nv.us-east-2.rds.amazonaws.com:3306/sdxDatabase";                   
     //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "rootMysql151";
+    static final String USER_AWS = "sdxrdb";
+    static final String PASS_AWS = "sdx2018rdb";
+    
+    static final String DB_URL_LOCAL = "jdbc:mysql://localhost:3306/sensodx_sql_db?useSSL=false";
+    //  Database credentials
+    static final String USER_LOCAL = "root";
+    static final String PASS_LOCAL = "rootMysql151";
+    
+    static final boolean USE_LOCAL_DB = true;
 
     Connection conn = null;
     String sql = null;
@@ -35,7 +42,14 @@ public class JDBCqueries {
         try {
 //            get JDBC ready for SQL queries
             Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            if(USE_LOCAL_DB){
+                conn = DriverManager.getConnection(DB_URL_LOCAL, USER_LOCAL, PASS_LOCAL);
+            }
+            else{
+                // use AWS credentials
+                conn = DriverManager.getConnection(DB_URL_AWS, USER_AWS, PASS_AWS);
+            }
+            
             stmt = conn.createStatement();
         } catch (ClassNotFoundException e) {
             // handle the error
