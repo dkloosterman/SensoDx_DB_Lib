@@ -18,18 +18,18 @@ public class JDBCqueries {
 
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    
-    static final String DB_URL_AWS = "jdbc:mysql://dkloostermanrdb.czkvpn4qk8nv.us-east-2.rds.amazonaws.com:3306/sdxDatabase";                   
+
+    static final String DB_URL_AWS = "jdbc:mysql://dkloostermanrdb.czkvpn4qk8nv.us-east-2.rds.amazonaws.com:3306/sdxDatabase";
     //  Database credentials
     static final String USER_AWS = "sdxrdb";
     static final String PASS_AWS = "sdx2018rdb";
-    
+
     static final String DB_URL_LOCAL = "jdbc:mysql://localhost:3306/sensodx_sql_db?useSSL=false";
     //  Database credentials
     static final String USER_LOCAL = "root";
     static final String PASS_LOCAL = "rootMysql151";
-    
-    static final boolean USE_LOCAL_DB = true;
+
+    static final boolean USE_LOCAL_DB = false;
 
     Connection conn = null;
     String sql = null;
@@ -42,14 +42,16 @@ public class JDBCqueries {
         try {
 //            get JDBC ready for SQL queries
             Class.forName(JDBC_DRIVER);
-            if(USE_LOCAL_DB){
+            if (USE_LOCAL_DB) {
                 conn = DriverManager.getConnection(DB_URL_LOCAL, USER_LOCAL, PASS_LOCAL);
-            }
-            else{
+                System.out.println("Connect to database: " + DB_URL_LOCAL);
+
+            } else {
                 // use AWS credentials
                 conn = DriverManager.getConnection(DB_URL_AWS, USER_AWS, PASS_AWS);
+                System.out.println("Connect to database: " + DB_URL_AWS);
             }
-            
+
             stmt = conn.createStatement();
         } catch (ClassNotFoundException e) {
             // handle the error
@@ -75,7 +77,7 @@ public class JDBCqueries {
         boolean cartridgeFound = false;
 
         try {
-            
+
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
@@ -211,7 +213,7 @@ public class JDBCqueries {
     public boolean getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
 
         boolean instrumentFound = false;
-        
+
         try {
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Instrument_Deployed WHERE instrument_id = '" + instrID + "'";
@@ -219,7 +221,7 @@ public class JDBCqueries {
 
             while (rs.next()) {
                 instrumentFound = true;
-                
+
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setInstallation_timestamp(rs.getTimestamp("installation_timestamp"));
                 instrument.setDeployment_type(rs.getString("deployment_type"));
@@ -242,7 +244,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            return(instrumentFound);
+            return (instrumentFound);
 
         }   //end finally try
     }
@@ -278,14 +280,14 @@ public class JDBCqueries {
     public boolean getInstrumentMfgInfo(String forInstrID, Instrument instrument) {
 
         boolean instrumentFound = false;
-        
+
         try {
             // get and display data for seleted Instrument ID
             sql = "SELECT * FROM Instrument_Manufactured WHERE instrument_id = '" + forInstrID + "'";
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 instrumentFound = true;
-                        
+
                 instrument.setInstrument_id(rs.getString("instrument_id"));
                 instrument.setManufactured_timestamp(rs.getTimestamp("manufactured_timestamp"));
                 instrument.setManufactured_location(rs.getString("manufactured_location"));
@@ -303,7 +305,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            return(instrumentFound);
+            return (instrumentFound);
 
         }   //end finally try
     }
@@ -518,10 +520,10 @@ public class JDBCqueries {
         return (allIDs);
     }
 
-    public boolean  getTestInstanceInfo(String testID, TestInstance test, boolean getTestImages, boolean deleteTestImages) {
+    public boolean getTestInstanceInfo(String testID, TestInstance test, boolean getTestImages, boolean deleteTestImages) {
 
         boolean testInstanceFound = false;
-        
+
         try {
             sql = "SELECT * FROM Clinical_Test_Instance WHERE clinical_test_instance_counter = '" + testID + "'";
             rs = stmt.executeQuery(sql);
@@ -587,7 +589,7 @@ public class JDBCqueries {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            return(testInstanceFound);
+            return (testInstanceFound);
 
         }   //end finally try
     }
