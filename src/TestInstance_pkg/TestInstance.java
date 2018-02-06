@@ -46,7 +46,7 @@ public class TestInstance {
     List<Long> image_id_list;
     String image_id_str = null;
 
-    double analysis_result = 0;
+    double analysis_result = -1;
     Date clinical_test_timestamp = null;
 
     String testResultString = null;
