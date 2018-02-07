@@ -7,8 +7,6 @@ import Cartridge_pkg.Cartridge;
 import TestInstance_pkg.*;
 import Errors_pkg.Errors;
 import java.io.*;
-//import java.nio.file.Files;
-//import java.util.Date;
 
 /**
  *
@@ -111,7 +109,7 @@ public class JDBCqueries {
         }   //end finally try
     }
 
-    public boolean isCartridgeValidToUse(String forCartID) {
+    public boolean isCartridgeInDatabase(String forCartID) {
 
         boolean result = false;
 
@@ -123,15 +121,52 @@ public class JDBCqueries {
             sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
 
-            while (rs.next()) {
+            if (rs.next()) {
                 result = true;
             }
+
+//            //verofy that cartridge ID not used in previous test
+//            sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
+//            rs = stmt.executeQuery(sql);
+//            while (rs.next()) {
+//                result = false;
+//            } // end while (rs.next()) 
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+//            return (result);
+        }   //end finally
+        return (result);
+    }
+
+    public boolean hasCartridgeBeenUsedInPreviousTest(String forCartID) {
+
+        boolean result = false;
+
+        // the following line is for test only
+        // uncomment and put a previously used cardridege ID here to confirm test then fails
+//        forCartID = "20171229111059589";
+        try {
+//            // verify that cartridge ID is in database
+//            sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
+//            rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                result = true;
+//            }
 
             //verofy that cartridge ID not used in previous test
             sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                result = false;
+                result = true;
             } // end while (rs.next()) 
 
         } catch (SQLException e) {
@@ -144,9 +179,10 @@ public class JDBCqueries {
             System.exit(0);
         } finally {
             //finally block used to close resources
-
+//            return (result);
         }   //end finally
         return (result);
+
     }
 
     public void insertCartridge(Cartridge cartridge) {

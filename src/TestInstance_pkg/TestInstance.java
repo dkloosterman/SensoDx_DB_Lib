@@ -85,43 +85,60 @@ public class TestInstance {
             this.dicom.setPatient_id(this.patient_id);
             this.dicom.setTimestamp(this.clinical_test_timestamp);
 
-            if (queries.isCartridgeValidToUse(this.cartridge_id)) {
+            if (queries.isCartridgeInDatabase(this.cartridge_id)) {
 
-                if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
+                if (!queries.hasCartridgeBeenUsedInPreviousTest(this.cartridge_id)) {
 
-                    if (queries.insertClinicalTestImages(this.dicom)) {
+                    if ((instrument.getAssay_types_enabled() & cartridge.getAssay_type()) > 0) {
 
-                        List<TestImage> images = this.dicom.testImages;
-                        this.image_id_list.clear();
-                        this.image_id_str = "";
-                        Long id;
+                        if (queries.insertClinicalTestImages(this.dicom)) {
 
-                        for (TestImage image : images) {
+                            List<TestImage> images = this.dicom.testImages;
+                            this.image_id_list.clear();
+                            this.image_id_str = "";
+                            Long id;
 
-                            id = image.getClinicalTestImage_id();
-                            this.image_id_list.add(id);
-                            this.image_id_str += id.toString() + ":";
+                            for (TestImage image : images) {
+
+                                id = image.getClinicalTestImage_id();
+                                this.image_id_list.add(id);
+                                this.image_id_str += id.toString() + ":";
+                            }
+
+                        } else {
+                            Errors error = new Errors();
+
+                            error.buildErrorObject_UnableToAddClinicalTestImageToDatabase(this.instrument_id,
+                                    this.cartridge_id,
+                                    null);
+
+                            this.queries.insertError(error);
+
+                            this.testResultString = error.toString();
+                            error = null;
+
+                            testResult = false;
                         }
 
                     } else {
                         Errors error = new Errors();
 
-                        error.buildErrorObject_UnableToAddClinicalTestImageToDatabase(this.instrument_id,
+                        error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
                                 this.cartridge_id,
                                 null);
 
                         this.queries.insertError(error);
 
                         this.testResultString = error.toString();
+
                         error = null;
 
                         testResult = false;
                     }
-
                 } else {
                     Errors error = new Errors();
 
-                    error.buildErrorObject_CartridgeNotCampatibleWithInstrument(this.instrument_id,
+                    error.buildErrorObject_CartridgeUsedInPreviosTest(this.instrument_id,
                             this.cartridge_id,
                             null);
 
@@ -136,7 +153,7 @@ public class TestInstance {
             } else {
                 Errors error = new Errors();
 
-                error.buildErrorObject_CartridgeNotValidToUse(this.instrument_id,
+                error.buildErrorObject_CartridgeNotInDatabase(this.instrument_id,
                         this.cartridge_id,
                         null);
 
@@ -153,7 +170,7 @@ public class TestInstance {
             System.out.println("\n" + "General Exception " + e.getMessage());
             System.exit(0);
         } finally {
-            
+
             return (testResult);
         }   //end finally try
 
@@ -174,7 +191,7 @@ public class TestInstance {
                 + "\n"
                 + dicom.toString();
     }
-    
+
     public long getClinical_test_instance_counter() {
         return clinical_test_instance_counter;
     }

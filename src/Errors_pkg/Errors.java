@@ -21,7 +21,8 @@ public class Errors {
     final public String ErrorCode_UnableToAddClinicalTestImageToDatabase = "1002";
     final public String ErrorCode_ClinicalTestImageNotFound = "1003";
     final public String ErrorCode_ClinicalTestImageSetToNull = "1004";
-    final public String ErrorCode_CartridgeNotValidToUse = "1005";
+    final public String ErrorCode_CartridgeUsedPreviously = "1005";
+    final public String ErrorCode_CartridgeNotInDatabase = "1006";
 
 
     /*
@@ -202,17 +203,39 @@ public class Errors {
         }   //end finally 
     }
 
-    public void buildErrorObject_CartridgeNotValidToUse(String instrument_id,
+    public void buildErrorObject_CartridgeUsedInPreviosTest(String instrument_id,
             String cartridge_id,
             String testInstance_id) {
 
         try {
 
-            this.setDescription("Unable to run test because cartridge not in database or was used previously");
+            this.setDescription("Unable to run test because cartridge was used in previous test");
             this.setInstrument_id(instrument_id);
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
-            this.setError_code(ErrorCode_CartridgeNotValidToUse);
+            this.setError_code(ErrorCode_CartridgeUsedPreviously);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+    
+     public void buildErrorObject_CartridgeNotInDatabase(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Unable to run test because cartridge is Not in database");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_CartridgeNotInDatabase);
             this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {
