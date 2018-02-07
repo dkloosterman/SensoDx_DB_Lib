@@ -23,6 +23,8 @@ public class Errors {
     final public String ErrorCode_ClinicalTestImageSetToNull = "1004";
     final public String ErrorCode_CartridgeUsedPreviously = "1005";
     final public String ErrorCode_CartridgeNotInDatabase = "1006";
+    final public String ErrorCode_InstrumentDoesNotAcceptTrustMeCartridges = "1007";
+    final public String ErrorCode_JobSubmittedWithNoValidTestImages= "1008";
 
 
     /*
@@ -236,6 +238,50 @@ public class Errors {
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
             this.setError_code(ErrorCode_CartridgeNotInDatabase);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+     
+     public void buildErrorObject_InstrumentNotTrustMeConfigured(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Instrument is not configured to accept TrustMe cartridges");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_InstrumentDoesNotAcceptTrustMeCartridges);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+     
+     public void buildErrorObject_JobWithNoTestImages(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Job Submitted with No valid Test Images");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_JobSubmittedWithNoValidTestImages);
             this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {
