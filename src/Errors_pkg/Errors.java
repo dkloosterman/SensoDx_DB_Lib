@@ -25,6 +25,8 @@ public class Errors {
     final public String ErrorCode_CartridgeNotInDatabase = "1006";
     final public String ErrorCode_InstrumentDoesNotAcceptTrustMeCartridges = "1007";
     final public String ErrorCode_JobSubmittedWithNoValidTestImages= "1008";
+    final public String ErrorCode_InstrumentNotInDatabase = "1009";
+    
 
 
     /*
@@ -121,7 +123,7 @@ public class Errors {
 
         try {
 
-            this.setDescription("Cartridge is not compatible with assay tests supported by this Instrument");
+            this.setDescription("Instrument is not enabled to run this Cartridges assay type");
             this.setInstrument_id(instrument_id);
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
@@ -282,6 +284,28 @@ public class Errors {
             this.setCartridge_id(cartridge_id);
             this.setTest_instance_id(testInstance_id);
             this.setError_code(ErrorCode_JobSubmittedWithNoValidTestImages);
+            this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
+
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+
+        }   //end finally 
+    }
+     
+     public void buildErrorObject_InstrumentNotInDatabase(String instrument_id,
+            String cartridge_id,
+            String testInstance_id) {
+
+        try {
+
+            this.setDescription("Unable to run test because Instrument is Not in database");
+            this.setInstrument_id(instrument_id);
+            this.setCartridge_id(cartridge_id);
+            this.setTest_instance_id(testInstance_id);
+            this.setError_code(ErrorCode_InstrumentNotInDatabase);
             this.setError_timestamp(new Timestamp(System.currentTimeMillis()));
 
         } catch (Exception e) {

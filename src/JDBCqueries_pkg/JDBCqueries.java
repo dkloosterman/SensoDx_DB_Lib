@@ -29,7 +29,7 @@ public class JDBCqueries {
     static final String USER_LOCAL = "root";
     static final String PASS_LOCAL = "rootMysql151";
 
-    static final boolean USE_LOCAL_DB = false;
+    static final boolean USE_LOCAL_DB = true;
 
     Connection conn = null;
     String sql = null;
@@ -113,9 +113,7 @@ public class JDBCqueries {
 
         boolean result = false;
 
-        // the following line is for test only
-        // uncomment and put a previously used cardridege ID here to confirm test then fails
-//        forCartID = "20171229111059589";
+        
         try {
             // verify that cartridge ID is in database
             sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
@@ -125,12 +123,7 @@ public class JDBCqueries {
                 result = true;
             }
 
-//            //verofy that cartridge ID not used in previous test
-//            sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
-//            rs = stmt.executeQuery(sql);
-//            while (rs.next()) {
-//                result = false;
-//            } // end while (rs.next()) 
+
         } catch (SQLException e) {
             // handle the error
             System.out.println("\n" + "SQL Exception " + e.getMessage());
@@ -150,17 +143,9 @@ public class JDBCqueries {
 
         boolean result = false;
 
-        // the following line is for test only
-        // uncomment and put a previously used cardridege ID here to confirm test then fails
-//        forCartID = "20171229111059589";
+       
         try {
-//            // verify that cartridge ID is in database
-//            sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
-//            rs = stmt.executeQuery(sql);
-//
-//            while (rs.next()) {
-//                result = true;
-//            }
+
 
             //verofy that cartridge ID not used in previous test
             sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
@@ -248,6 +233,37 @@ public class JDBCqueries {
     }
 
     // Instrument quesries
+    public boolean isInstrumentInDatabase(String instrID) {
+
+        boolean result = false;
+
+        
+        try {
+            // verify that cartridge ID is in database
+           sql = "SELECT * FROM Instrument_Manufactured WHERE instrument_id = '" + instrID + "'";
+           
+            rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                result = true;
+            }
+
+
+        } catch (SQLException e) {
+            // handle the error
+            System.out.println("\n" + "SQL Exception " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            // handle the error
+            System.out.println("\n" + "General Exception " + e.getMessage());
+            System.exit(0);
+        } finally {
+            //finally block used to close resources
+//            return (result);
+        }   //end finally
+        return (result);
+    }
+
     public boolean getInstrumentDeploymentInfo(String instrID, Instrument instrument) {
 
         boolean instrumentFound = false;
@@ -606,7 +622,6 @@ public class JDBCqueries {
                         testImage.setClinicalTestImage_length(this.getClinicalTestImage(Long.parseLong(id), filePath + fileName));
 
                         System.out.println(testImage.toString());
-//                        System.out.println("Image ID is: " + id);
 
                         if (deleteTestImages) {
                             File f = new File(filePath + fileName);
@@ -659,12 +674,6 @@ public class JDBCqueries {
                 error.setError_counter(rs.getLong("error_counter"));
             }
 
-//            sql = "SELECT error_counter FROM Errors WHERE error_timestamp > '" + "2017-04-04 16:00:00" + "'";            
-//            rs = stmt.executeQuery(sql);
-//            long counter = 0;
-//            while (rs.next()) {
-//                 counter = (rs.getLong("error_counter"));
-//            }
         } catch (SQLException e) {
             // handle the error
             System.out.println("\n" + "SQL Exception " + e.getMessage());
