@@ -30,9 +30,9 @@ public class JDBCqueries {
     static final String PASS_LOCAL = "rootMysql151";
 
     static boolean useLocalDB = false;
+    static boolean connectedToDB = false;
 //    static final boolean USE_LOCAL_DB = false;
 
-    
     Connection conn = null;
     String sql = null;
     Statement stmt = null;
@@ -47,11 +47,12 @@ public class JDBCqueries {
             if (useLocalDB) {
                 conn = DriverManager.getConnection(DB_URL_LOCAL, USER_LOCAL, PASS_LOCAL);
                 System.out.println("Connected to database: " + DB_URL_LOCAL);
-
+                connectedToDB = true;
             } else {
                 // use AWS credentials
                 conn = DriverManager.getConnection(DB_URL_AWS, USER_AWS, PASS_AWS);
                 System.out.println("Connected to database: " + DB_URL_AWS);
+                connectedToDB = true;
             }
 
             stmt = conn.createStatement();
@@ -62,11 +63,13 @@ public class JDBCqueries {
         } catch (SQLException e) {
             // handle the error
             System.out.println("SQL Exception " + e.getMessage());
-            System.exit(0);
+            System.out.println("Failed to Connect to Databse ");
+            connectedToDB = false;
+//            System.exit(0);
         } catch (Exception e) {
             // handle the error
             System.out.println("General Exception " + e.getMessage());
-            System.exit(0);
+//            System.exit(0);
         } finally {
             //finally block used to close resources
 
@@ -115,7 +118,6 @@ public class JDBCqueries {
 
         boolean result = false;
 
-        
         try {
             // verify that cartridge ID is in database
             sql = "SELECT * FROM Cartridge_Manufactured WHERE cartridge_id = '" + forCartID + "'";
@@ -124,7 +126,6 @@ public class JDBCqueries {
             if (rs.next()) {
                 result = true;
             }
-
 
         } catch (SQLException e) {
             // handle the error
@@ -145,9 +146,7 @@ public class JDBCqueries {
 
         boolean result = false;
 
-       
         try {
-
 
             //verofy that cartridge ID not used in previous test
             sql = "SELECT * FROM Clinical_Test_Instance WHERE cartridge_id = '" + forCartID + "'";
@@ -239,17 +238,15 @@ public class JDBCqueries {
 
         boolean result = false;
 
-        
         try {
             // verify that cartridge ID is in database
-           sql = "SELECT * FROM Instrument_Manufactured WHERE instrument_id = '" + instrID + "'";
-           
+            sql = "SELECT * FROM Instrument_Manufactured WHERE instrument_id = '" + instrID + "'";
+
             rs = stmt.executeQuery(sql);
 
             if (rs.next()) {
                 result = true;
             }
-
 
         } catch (SQLException e) {
             // handle the error
@@ -780,7 +777,7 @@ public class JDBCqueries {
         }   //end finally
         return (columnNames);
     }
-    
+
     public boolean isUseLocalDB() {
         return useLocalDB;
     }
@@ -789,4 +786,11 @@ public class JDBCqueries {
         this.useLocalDB = useLocalDB;
     }
 
+    public static boolean isConnectedToDB() {
+        return connectedToDB;
+    }
+
+    public static void setConnectedToDB(boolean connectedToDB) {
+        JDBCqueries.connectedToDB = connectedToDB;
+    }
 }
