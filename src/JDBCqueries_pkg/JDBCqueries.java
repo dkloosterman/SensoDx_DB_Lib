@@ -29,8 +29,10 @@ public class JDBCqueries {
     static final String USER_LOCAL = "root";
     static final String PASS_LOCAL = "rootMysql151";
 
-    static final boolean USE_LOCAL_DB = true;
+    static boolean useLocalDB = false;
+//    static final boolean USE_LOCAL_DB = false;
 
+    
     Connection conn = null;
     String sql = null;
     Statement stmt = null;
@@ -42,7 +44,7 @@ public class JDBCqueries {
         try {
 //            get JDBC ready for SQL queries
             Class.forName(JDBC_DRIVER);
-            if (USE_LOCAL_DB) {
+            if (useLocalDB) {
                 conn = DriverManager.getConnection(DB_URL_LOCAL, USER_LOCAL, PASS_LOCAL);
                 System.out.println("Connected to database: " + DB_URL_LOCAL);
 
@@ -778,4 +780,13 @@ public class JDBCqueries {
         }   //end finally
         return (columnNames);
     }
+    
+    public boolean isUseLocalDB() {
+        return useLocalDB;
+    }
+
+    public void setUseLocalDB(boolean useLocalDB) {
+        this.useLocalDB = useLocalDB;
+    }
+
 }
