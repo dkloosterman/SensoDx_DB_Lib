@@ -44,7 +44,7 @@ public class JDBCqueries {
         try {
 //            get JDBC ready for SQL queries
             Class.forName(JDBC_DRIVER);
-            if (useLocalDB) {
+            if (this.useLocalDB) {
                 conn = DriverManager.getConnection(DB_URL_LOCAL, USER_LOCAL, PASS_LOCAL);
                 System.out.println("Connected to database: " + DB_URL_LOCAL);
                 connectedToDB = true;
