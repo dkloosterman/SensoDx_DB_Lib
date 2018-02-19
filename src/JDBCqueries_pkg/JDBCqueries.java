@@ -29,7 +29,7 @@ public class JDBCqueries {
     static final String USER_LOCAL = "root";
     static final String PASS_LOCAL = "rootMysql151";
 
-    static boolean useLocalDB = false;
+    static boolean useLocalDB = true;
     static boolean connectedToDB = false;
 //    static final boolean USE_LOCAL_DB = false;
 
