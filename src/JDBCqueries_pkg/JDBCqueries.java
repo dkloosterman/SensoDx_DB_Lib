@@ -17,13 +17,13 @@ public class JDBCqueries {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-    // Local MySQL Database
+    // AWS MySQL Database
     static final String DB_URL_AWS = "jdbc:mysql://dkloostermanrdb.czkvpn4qk8nv.us-east-2.rds.amazonaws.com:3306/sdxDatabase";
     //  Database credentials
-    static final String USER_AWS = "sdxrdb";
+    static final String USER_AWS = "sdxrdb_";
     static final String PASS_AWS = "sdx2018rdb";
 
-    // AWS MySQL Database
+    // Local MySQL Database
     static final String DB_URL_LOCAL = "jdbc:mysql://localhost:3306/sensodx_sql_db?useSSL=false";
     //  Database credentials
     static final String USER_LOCAL = "root";
