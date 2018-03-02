@@ -20,7 +20,7 @@ public class JDBCqueries {
     // AWS MySQL Database
     static final String DB_URL_AWS = "jdbc:mysql://dkloostermanrdb.czkvpn4qk8nv.us-east-2.rds.amazonaws.com:3306/sdxDatabase";
     //  Database credentials
-    static final String USER_AWS = "sdxrdb_";
+    static final String USER_AWS = "sdxrdb";
     static final String PASS_AWS = "sdx2018rdb";
 
     // Local MySQL Database
@@ -29,7 +29,7 @@ public class JDBCqueries {
     static final String USER_LOCAL = "root";
     static final String PASS_LOCAL = "rootMysql151";
 
-    static boolean useLocalDB = true;
+    static boolean useLocalDB = false;
     static boolean connectedToDB = false;
 //    static final boolean USE_LOCAL_DB = false;
 
